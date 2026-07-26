@@ -1,6 +1,13 @@
 import "./Hero.css";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+
 
 function Hero() {
+
+  const { user } = useAuth()
+  const navigate = useNavigate()
   return (
     <section className="hero">
       <div className="hero-content">
@@ -15,13 +22,17 @@ function Hero() {
         </p>
 
         <div className="hero-buttons">
-          <button className="search-btn">
+          <button className="search-btn"
+          onClick={() => navigate("/jobs")}>
             Search Jobs
           </button>
 
-          <button className="post-btn">
-            Post a Job
-          </button>
+          {user?.role === "admin" && (
+  <button className="post-btn"
+  onClick={() => navigate("/admin/jobs/create")}>
+    Post a Job
+  </button>
+)}
         </div>
 
       </div>

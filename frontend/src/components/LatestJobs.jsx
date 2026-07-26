@@ -1,40 +1,51 @@
+import { getJobs } from "../services/jobService";
+import { useEffect, useState } from "react";
+import { Link, useNavigate  } from "react-router-dom";
 import "./LatestJobs.css";
 
 
 
 function LatestJobs(){
 
-    const jobs = [
-  {
-    id: 1,
-    title: "Frontend Developer",
-    company: "Google",
-    location: "Mumbai",
-    salary: "₹8 - ₹12 LPA",
-    type: "Full Time",
-    logo: "https://logo.clearbit.com/google.com",
-  },
-  {
-    id: 2,
-    title: "Backend Developer",
-    company: "Microsoft",
-    location: "Bangalore",
-    salary: "₹10 - ₹15 LPA",
-    type: "Remote",
-    logo: "https://logo.clearbit.com/microsoft.com",
-  },
-  {
-    id: 3,
-    title: "React Developer",
-    company: "Amazon",
-    location: "Hyderabad",
-    salary: "₹7 - ₹11 LPA",
-    type: "Internship",
-    logo: "https://logo.clearbit.com/amazon.com",
-  },
-];
+   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
 
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+
+  const fetchJobs = async () => {
+    try {
+      const response = await getJobs();
+
+       // Take newest jobs first and show only 6
+       const latestJobs = response.data.jobs
+       .sort(
+          (a, b) =>
+            new Date(b.createdAt) - new Date(a.createdAt)
+          )
+          .slice(0, 6);
+
+          setJobs(latestJobs) ;
+    } catch {
+      console.log("Failed to fetch latest jobs:", error);
+    } finally {
+      setLoading(false);
+    };
+  }
+
+  if (loading) {
+    return (
+      <section className="latest-jobs">
+        <div className="container">
+          <h2>Latest Jobs</h2>
+          <p>Loading jobs...</p>
+        </div>
+      </section>
+    );
+  }
 
 
     return(
@@ -46,8 +57,10 @@ function LatestJobs(){
             <div className="jobs-grid">
                 {
                     jobs.map((job) => (
-                        <div className="job-card" key={job.id}>
-                            <img src={job.logo} alt={job.company} />
+                        <div className="job-card" key={job._id}>
+                           {job.logo && (
+  <img src={job.logo} alt={job.company} />
+)}
 
                              <h3>{job.title}</h3>
 

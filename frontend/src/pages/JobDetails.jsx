@@ -11,7 +11,7 @@ function JobDetails() {
 
     useEffect(()=>{
         fetchJob();
-    }, [])
+    }, [id])
 
     const fetchJob = async () => {
         try {
@@ -27,57 +27,124 @@ function JobDetails() {
         return <h2 className="text-center mt-5">Loading...</h2>;
     }
 
+    const logoUrl = job.logo
+  ? `http://localhost:5000/${job.logo.replace(/\\/g, "/")}`
+  : null;
 
 
     return (
 
 
-        <div className="container mt-5">
-            <div className="card-shadow">
-                <div className="card-header bg-primary text-white">
+        <div className="container mt-5 mb-5">
 
+      <div className="card shadow">
 
-                    <h2>
-                        {job.title}
-                    </h2>
-                    <div className="card-body">
-                        <h4 className="text-success" >{job.company}</h4>
-                    </div>
-<hr/>
+        {/* Header */}
+        <div className="card-header bg-primary text-white">
 
- <p>
-            <strong>Location :</strong> {job.location}
-          </p>
+          <div className="d-flex align-items-center gap-3">
 
-          <p>
-            <strong>Salary :</strong> {job.salary}
-          </p>
+            {/* Company Logo */}
+            {logoUrl ? (
+              <div
+                className="bg-white rounded p-2"
+                style={{
+                  width: "80px",
+                  height: "80px",
+                }}
+              >
+                <img
+                  src={logoUrl}
+                  alt={`${job.company} logo`}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
+            ) : (
+              <div
+                className="bg-white text-primary rounded d-flex align-items-center justify-content-center"
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                }}
+              >
+                {job.company?.charAt(0).toUpperCase()}
+              </div>
+            )}
 
-          <p>
-            <strong>Experience :</strong> {job.experience}
-          </p>
+            {/* Job + Company */}
+            <div>
+              <h2 className="mb-1">
+                {job.title}
+              </h2>
 
-          <p>
-            <strong>Skills :</strong> {job.skills}
-          </p>
-
-          <p>
-            <strong>Description :</strong>
-          </p>
-
-          <p>{job.description}</p>
-
-
-                    <Link
-                    to={`/apply/${job._id}`}
-                    className="btn btn-success">Apply Now
-    
-                    </Link>
-
-
-                </div>
+              <h5 className="mb-0">
+                {job.company}
+              </h5>
             </div>
+
+          </div>
+
         </div>
+
+        {/* Body */}
+        <div className="card-body">
+
+          <p>
+            <strong>Location: </strong>
+            {job.location}
+          </p>
+
+          <p>
+            <strong>Salary: </strong>
+            {job.salary}
+          </p>
+
+          <p>
+            <strong>Experience: </strong>
+            {job.experience}
+          </p>
+
+          <p>
+            <strong>Skills: </strong>
+            {Array.isArray(job.skills)
+              ? job.skills.join(", ")
+              : job.skills}
+          </p>
+
+          <hr />
+
+          <h5>Job Description</h5>
+
+          <p>
+            {job.description}
+          </p>
+
+          {job.lastDate && (
+            <p>
+              <strong>Last Date to Apply: </strong>
+
+              {new Date(job.lastDate).toLocaleDateString()}
+            </p>
+          )}
+
+          <Link
+            to={`/apply/${job._id}`}
+            className="btn btn-success mt-3"
+          >
+            Apply Now
+          </Link>
+
+        </div>
+
+      </div>
+
+    </div>
 
 
     )

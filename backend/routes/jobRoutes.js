@@ -1,4 +1,5 @@
 const express = require("express")
+const uploadLogo = require("../middleware/uploadLogo")
 
 
 const { 
@@ -11,7 +12,7 @@ const {
 
  const router = express.Router()
 
- router.post("/", addJob);
+ router.post("/", uploadLogo.single("logo"), addJob)
 
  router.get("/", getJobs);
 

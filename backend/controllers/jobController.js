@@ -1,20 +1,43 @@
 const Job = require("../models/Job");
 
-const addJob = async (req, res)=>{
-    try {
-        const job = await Job.create(req.body);
+const addJob = async (req, res) => {
+  try {
+    const {
+      title,
+      company,
+      location,
+      salary,
+      experience,
+      skills,
+      description,
+      lastDate,
+    } = req.body;
 
-        res.status(201).json({
-            success: true,
-            message: "Job Added Successfully",
-            job,
-        });
-    }catch (error){
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
+    const job = await Job.create({
+      title,
+      company,
+      location,
+      salary,
+      experience,
+      skills: skills ? skills.split(",") : [],
+      description,
+      lastDate,
+
+      // Save uploaded logo path
+      logo: req.file ? req.file.path : "",
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Job Added Successfully",
+      job,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 const getJobs = async (req, res) => {

@@ -1,85 +1,85 @@
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+  import { Link } from "react-router-dom";
+  import { useAuth } from "../context/AuthContext";
 
-function Navbar() {
+  function Navbar() {
 
-  const { isLoggedIn } = useAuth();
+    const { isLoggedIn } = useAuth();
 
- 
+  
 
-  return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div className="container">
+    return (
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div className="container">
 
-        <Link className="navbar-brand" to="/">
-          Job Portal
-        </Link>
+          <Link className="navbar-brand" to="/">
+            Job Portal
+          </Link>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
 
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ms-auto">
 
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-              Home
-              
-              </Link>
-            </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
+                Home
+                
+                </Link>
+              </li>
 
-            <li className="nav-item">
-              <Link className="nav-link" to="/jobs">
-              Jobs
-              
-              </Link>
-            </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/jobs">
+                Jobs
+                
+                </Link>
+              </li>
 
-            <li className="nav-item">
-              {!isLoggedIn && (
-  <Link className="nav-link" to="/login">
-    Login
-  </Link>
-)}
-            </li>
+              <li className="nav-item">
+                {!isLoggedIn && (
+    <Link className="nav-link" to="/login">
+      Login
+    </Link>
+  )}
+              </li>
 
-            <li className="nav-item">
-              {!isLoggedIn && (
-  <Link className="nav-link" to="/register">
-    Register
-  </Link>
-)}
-            </li>
+              <li className="nav-item">
+                {!isLoggedIn && (
+    <Link className="nav-link" to="/register">
+      Register
+    </Link>
+  )}
+              </li>
 
-            <li className="nav-item">
+              <li className="nav-item">
+                {isLoggedIn && (
+    <Link className="nav-link" to="/profile">
+      Profile
+    </Link>
+  )}
+
+              </li>
+
+              <li className="nav-item">
               {isLoggedIn && (
-  <Link className="nav-link" to="/profile">
-    Profile
-  </Link>
-)}
-
-            </li>
-
-            <li className="nav-item">
-             {isLoggedIn && (
-  <Link className="nav-link" to="/my-applications">
-    My Applications
-  </Link>
-)}
-            </li>
+    <Link className="nav-link" to="/my-applications">
+      My Applications
+    </Link>
+  )}
+              </li>
 
 
-          </ul>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
-  );
-}
+      </nav>
+    );
+  }
 
-export default Navbar;
+  export default Navbar;

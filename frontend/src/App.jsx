@@ -1,5 +1,4 @@
-import { Routes, Route } from "react-router-dom";
-
+import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 
 import Home from "./pages/Home";
@@ -17,6 +16,7 @@ import ManageJobs from "./admin/ManageJobs";
 import Applications from "./admin/Applications";
 import AdminRoute from "./components/AdminRoute";
 import GoogleSuccess from "./pages/GoogleSuccess";
+import CreateJob from "./pages/CreateJob";
 // import AdminNavbar from "../components/AdminNavbar";
 
 
@@ -40,6 +40,19 @@ function App() {
 
         <Route path="/google-success" element={<GoogleSuccess />} />
 
+       <Route
+  path="/admin/jobs/create"
+  element={
+    <AdminRoute>
+      <CreateJob />
+    </AdminRoute>
+  }
+/>
+
+<Route
+  path="/admin"
+  element={<Navigate to="/admin/dashboard" replace />}
+/>
         <Route path="/admin/dashboard" element={<AdminRoute>
           <Dashboard />
         </AdminRoute>}/>

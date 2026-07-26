@@ -40,15 +40,15 @@ function AdminNavbar() {
 
       <div className="container">
 
-        <Link className="navbar-brand" to="/admin">
-          Admin Panel
-        </Link>
+        <Link className="navbar-brand" to="/admin/dashboard">
+  Admin Panel
+</Link>
 
         <div className="navbar-nav">
 
-          <Link className="nav-link" to="/admin">
-            Dashboard
-          </Link>
+         <Link className="nav-link" to="/admin/dashboard">
+  Dashboard
+</Link> 
 
           <Link className="nav-link" to="/admin/users">
             Users
