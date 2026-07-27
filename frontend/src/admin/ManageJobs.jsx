@@ -1,6 +1,6 @@
     import { useEffect, useState } from "react";
     import { getJobs, deleteJob } from "../services/adminService";
-import AdminNavbar from "../components/AdminNavbar";
+// import AdminNavbar from "../components/AdminNavbar";
 
     function ManageJobs() {
         const [jobs, setJobs] = useState([]);
@@ -59,7 +59,7 @@ await deleteJob(id);
 
     return(
         <>
-        <AdminNavbar />
+        {/* <AdminNavbar /> */}
         <div className="container mt-4">
 
             <h2 className="mb-3">Manage Jobs</h2>

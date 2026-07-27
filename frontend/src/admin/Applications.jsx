@@ -3,7 +3,7 @@ import {
   getApplications,
   updateApplicationStatus,
 } from "../services/adminService";
-import AdminNavbar from "../components/AdminNavbar";
+// import AdminNavbar from "../components/AdminNavbar";
 
 function Applications() {
 
@@ -61,7 +61,7 @@ const [search, setSearch] = useState("");
 
    return (
     <>
-    <AdminNavbar />
+    {/* <AdminNavbar /> */}
     <div className="container mt-4">
         <h2 className="mb-4">
         Manage Applications

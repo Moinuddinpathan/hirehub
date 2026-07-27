@@ -10,22 +10,71 @@ const sendStatusEmail = require("../utils/sendEmailStatus");
 
 const getDashboard = async (req, res) => {
   try {
-    const users = await User.countDocuments();
-    const jobs = await Job.countDocuments();
-    const applications = await Application.countDocuments();
+    // Run independent database queries together
+    const [
+      totalUsers,
+      totalJobs,
+      totalApplications,
+      pendingApplications,
+      reviewedApplications,
+      selectedApplications,
+      rejectedApplications,
+      recentApplications,
+    ] = await Promise.all([
+      User.countDocuments(),
 
-   res.json({
-  success: true,
-  dashboard: {
-    totalUsers: users,
-    totalJobs: jobs,
-    totalApplications: applications,
-  },
-});
+      Job.countDocuments(),
+
+      Application.countDocuments(),
+
+      Application.countDocuments({
+        status: "Pending",
+      }),
+
+      Application.countDocuments({
+        status: "Reviewed",
+      }),
+
+      Application.countDocuments({
+        status: "Selected",
+      }),
+
+      Application.countDocuments({
+        status: "Rejected",
+      }),
+
+      Application.find()
+        .populate("user", "name email")
+        .populate("job", "title company")
+        .sort({ createdAt: -1 })
+        .limit(5),
+    ]);
+
+    res.status(200).json({
+      success: true,
+
+      dashboard: {
+        totalUsers,
+        totalJobs,
+        totalApplications,
+
+        applicationStats: {
+          pending: pendingApplications,
+          reviewed: reviewedApplications,
+          selected: selectedApplications,
+          rejected: rejectedApplications,
+        },
+
+        recentApplications,
+      },
+    });
+
   } catch (error) {
+    console.error("Dashboard Error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to load dashboard",
     });
   }
 };

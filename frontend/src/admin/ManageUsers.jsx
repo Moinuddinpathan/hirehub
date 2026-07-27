@@ -3,7 +3,7 @@ import {
   getUsers,
   deleteUser,
 } from "../services/adminService";
-import AdminNavbar from "../components/AdminNavbar";
+// import AdminNavbar from "../components/AdminNavbar";
 
 
 
@@ -60,7 +60,7 @@ function ManageUsers(){
 
     return(
         <>
-        <AdminNavbar />
+        {/* <AdminNavbar /> */}
          <div className="container mt-4">
 
             <h2 className="mb-3">Manage Users</h2>
