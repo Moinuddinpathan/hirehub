@@ -1,4 +1,4 @@
-const transporter = require("./sendEmail");
+const { transporter } = require("./sendEmail");
 
 const sendApplicationReceivedEmail = async (
   email,
@@ -12,6 +12,8 @@ console.log({
   name,
   jobTitle,
 });
+
+
 
   await transporter.sendMail({
 

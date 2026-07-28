@@ -8,6 +8,9 @@ const addJob = async (req, res) => {
       location,
       salary,
       experience,
+      // New fields
+      jobType,
+      workMode,
       skills,
       description,
       lastDate,
@@ -19,6 +22,8 @@ const addJob = async (req, res) => {
       location,
       salary,
       experience,
+      jobType,
+workMode,
       skills: skills ? skills.split(",") : [],
       description,
       lastDate,
@@ -33,6 +38,8 @@ const addJob = async (req, res) => {
       job,
     });
   } catch (error) {
+    console.error("CREATE JOB ERROR:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,

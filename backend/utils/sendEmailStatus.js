@@ -1,4 +1,4 @@
-const transporter = require("./sendEmail");
+const { transporter } = require("./sendEmail");
 
 const sendEmailStatus = async (
     email,

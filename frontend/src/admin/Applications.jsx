@@ -41,8 +41,10 @@ const [search, setSearch] = useState("");
 
         fetchApplications();
     } catch (error) {
-        console.log(error);
-
+        // console.log(error);
+         console.log("STATUS ERROR:", error);
+  console.log("BACKEND RESPONSE:", error.response?.data);
+  console.log("STATUS CODE:", error.response?.status);
         alert("Update Failed")
         
     }
