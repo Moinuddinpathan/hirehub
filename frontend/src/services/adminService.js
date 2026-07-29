@@ -35,3 +35,11 @@ export const updateApplicationStatus = (id, status) => {
         status,
     });
 } 
+
+export const updateJobStatus = async (id, status) => {
+  const response = await API.patch(`/admin/jobs/${id}/status`, {
+    status,
+  });
+
+  return response.data;
+};

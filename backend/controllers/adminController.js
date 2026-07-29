@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Job = require("../models/Job");
 const Application = require("../models/Application");
+const mongoose = require("mongoose");
 const sendStatusEmail = require("../utils/sendEmailStatus");
 
 
@@ -107,23 +108,53 @@ const getJobs = async (req, res) => {
 
   try {
 
-    const jobs = await Job.find();
+    const jobs = await Job.find().sort({ createdAt : -1}).lean();
 
-    res.json({
+    const jobsWithApplicants = await Promise.all(
+      jobs.map(async (job) => {
+         const applicantCount = await Application.countDocuments({
+          job: job._id,
+      });
+      return {
+        ...job,
+
+          // Handles old jobs created before status was added
+          status: job.status || "Active",
+
+          applicantCount,
+        };
+      })
+    );
+    res.status(200).json({
       success: true,
-      jobs,
+      jobs: jobsWithApplicants,
     });
 
   } catch (error) {
+    console.error("GET ADMIN JOBS ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to fetch jobs",
     });
-
   }
-
 };
+
+//     res.json({
+//       success: true,
+//       jobs,
+//     });
+
+//   } catch (error) {
+
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+
+//   }
+
+// };
 
 
 // Get All Applications
@@ -268,12 +299,53 @@ const deleteUser = async (req, res) => {
 };
 
 
+const updateJobStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID",
+      });
+    }
+
+    const job = await Job.findById(id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    job.status = status;
+    await job.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Job status updated successfully",
+      job,
+    });
+
+  } catch (error) {
+    console.error("UPDATE JOB STATUS ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update job status",
+    });
+  }
+};
+
 module.exports = {
   getDashboard,
   getUsers,
   getJobs,
   getApplications,
   updateApplicationStatus,
+  updateJobStatus,
   deleteJob,
   deleteUser,
 };

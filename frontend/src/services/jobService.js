@@ -4,6 +4,12 @@ export const getJobs = ()=>{
     return api.get("/jobs")
 }
 
+export const updateJobStatus = async (id, status) => {
+  const response = await api.patch(`/admin/jobs/${id}/status`,{
+    status,
+  })
+}
+
 export const getJobById = (id)=>{
     return api.get(`/jobs/${id}`);
 }
@@ -15,3 +21,4 @@ export const addJob = (formData) => {
     },
   });
 };
+

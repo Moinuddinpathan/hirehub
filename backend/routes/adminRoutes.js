@@ -6,6 +6,7 @@ const {
   getJobs,
   getApplications,
   updateApplicationStatus,
+  updateJobStatus,
   deleteUser,
   deleteJob,
   
@@ -55,6 +56,13 @@ router.put(
   adminMiddleware,
   updateApplicationStatus
 );
+
+router.patch(
+  "/jobs/:id/status",
+  authMiddleware,
+  adminMiddleware,
+  updateJobStatus
+)
 
 
 
