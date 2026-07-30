@@ -1,4 +1,5 @@
 const express = require("express");
+const { updateJob } = require("../controllers/jobController");
 
 const {
   getDashboard,
@@ -14,6 +15,8 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
+
+const uploadLogo = require("../middleware/uploadLogo");
 
 const router = express.Router();
 
@@ -64,6 +67,20 @@ router.patch(
   updateJobStatus
 )
 
+router.put(
+  "/jobs/:id",
+  authMiddleware,
+  adminMiddleware,
+  uploadLogo.single("logo"),
+
+  (req, res, next) => {
+    console.log("AFTER MULTER BODY:", req.body);
+    console.log("AFTER MULTER FILE:", req.file);
+    next();
+  },
+
+  updateJob
+);
 
 
 // Delete Job
@@ -80,5 +97,14 @@ router.delete(
   adminMiddleware,
   deleteUser
 );
+
+
+// router.put(
+//   "/jobs/:id",
+//   authMiddleware,
+//   adminMiddleware,
+//   uploadLogo.single("logo"),
+//   updateJob
+// );
 
 module.exports = router;

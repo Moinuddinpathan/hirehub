@@ -1,5 +1,6 @@
 import api from "../api/axios";
 
+
 // Dashboard
 export const getDashboard = () => {
     return api.get("/admin/dashboard")
@@ -36,10 +37,16 @@ export const updateApplicationStatus = (id, status) => {
     });
 } 
 
+// Update Job Status
 export const updateJobStatus = async (id, status) => {
-  const response = await API.patch(`/admin/jobs/${id}/status`, {
+  const response = await api.patch(`/admin/jobs/${id}/status`, {
     status,
   });
 
   return response.data;
+};
+
+// Update Job
+export const updateJob = (id, formData) => {
+  return api.put(`/admin/jobs/${id}`, formData);
 };

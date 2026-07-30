@@ -120,33 +120,38 @@ import "../styles/ManageJobs.css"
   // ===============================
   // DELETE JOB
   // ===============================
-        const handleDelete = async () => {
-    if (!selectedJob) return;
+const handleDelete = async () => {
+  if (!selectedJob) return;
 
-    try {
-      setActionLoading(true);
+  try {
+    setActionLoading(true);
 
-      await deleteJob(selectedJob._id);
+    // Delete job from backend
+    await deleteJob(selectedJob._id);
 
-      await fetchJobs();
+    // Fetch updated jobs
+    await fetchJobs();
 
-      closeModal();
+    // Close confirmation modal
+    setActionLoading(false);
+    setSelectedJob(null);
+    setActionType("");
 
-    } catch (error) {
-      console.error(
-        "Failed to delete job:",
-        error.response?.data || error
-      );
+  } catch (error) {
+    console.error(
+      "Failed to delete job:",
+      error.response?.data || error
+    );
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to delete job"
-      );
+    alert(
+      error.response?.data?.message ||
+      "Failed to delete job"
+    );
 
-    } finally {
-      setActionLoading(false);
-    }
-  };
+  } finally {
+    setActionLoading(false);
+  }
+};
 
 
    // ===============================
@@ -765,6 +770,7 @@ import "../styles/ManageJobs.css"
                     : "modal-confirm-button"
                 }
                 disabled={actionLoading}
+
                 onClick={
                   actionType === "delete"
                     ? handleDelete

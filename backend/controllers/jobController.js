@@ -90,32 +90,81 @@ const getJobById = async (req, res)=>{
 };
 
 
-const updateJob = async (req, res)=>{
-    try{
-        const job = await Job.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            
-            {new: true}
-        );
-        if(!job){
-            return res.status(404).json({
-                success:false,
-                message: "Job not Found"
-            });
-        }
+const updateJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
 
-        res.json({
-            success:true,
-            message:"Job updated successfully",
-            job,
-        });
-    } catch (error){
-        res.status(500).json({
-            success:false,
-            message:error.message,
-        })
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
     }
+    console.log("CONTENT TYPE:", req.headers["content-type"]);
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    const {
+      title,
+      company,
+      location,
+      salary,
+      experience,
+      jobType,
+      workMode,
+      skills,
+      description,
+      lastDate,
+      status,
+    } = req.body;
+
+    // Update fields
+    job.title = title ?? job.title;
+    job.company = company ?? job.company;
+    job.location = location ?? job.location;
+    job.salary = salary ?? job.salary;
+    job.experience = experience ?? job.experience;
+    job.jobType = jobType ?? job.jobType;
+    job.workMode = workMode ?? job.workMode;
+    job.description = description ?? job.description;
+    job.lastDate = lastDate ?? job.lastDate;
+
+    // Only update status when supplied
+    if (status) {
+      job.status = status;
+    }
+
+    // Convert comma-separated skills to array
+    if (skills !== undefined) {
+      job.skills = Array.isArray(skills)
+        ? skills
+        : skills
+            .split(",")
+            .map((skill) => skill.trim())
+            .filter(Boolean);
+    }
+
+    // Replace logo only when a new one was uploaded
+    if (req.file) {
+      job.logo = req.file.path;
+    }
+
+    await job.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      job,
+    });
+
+  } catch (error) {
+    console.error("UPDATE JOB ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 const deleteJob = async (req, res)=>{

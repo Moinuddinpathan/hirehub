@@ -22,6 +22,8 @@
   import AdminRoute from "./components/AdminRoute";
   import AdminLayout from "./components/AdminLayout";
 
+  import EditJob from "./pages/EditJob";
+
 
 
   function UserLayout() {
@@ -143,6 +145,12 @@
             element={<ManageJobs />}
           />
 
+             {/* EDIT JOB - PUT IT HERE */}
+             
+             <Route
+  path="/admin/jobs/:id/edit"
+  element={<EditJob />}
+/>
 
           {/* Applications */}
 
@@ -160,6 +168,9 @@
           />
 
         </Route>
+
+            
+
         </Routes>
       </>
     );
