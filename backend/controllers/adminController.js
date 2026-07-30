@@ -120,7 +120,7 @@ const getJobs = async (req, res) => {
 
           // Handles old jobs created before status was added
           status: job.status || "Active",
-
+                                                    
           applicantCount,
         };
       })
@@ -190,6 +190,23 @@ const updateApplicationStatus = async (req, res) => {
 
     const { status } = req.body;
 
+     // Allowed application statuses
+    const allowedStatuses = [
+      "Pending",
+      "Reviewed",
+      "Selected",
+      "Rejected",
+    ];
+
+     // Validate status
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid application status",
+      });
+    }
+
+    // Find application
     const application = await Application.findById(req.params.id)
     .populate("user")
     .populate("job");
@@ -204,33 +221,52 @@ const updateApplicationStatus = async (req, res) => {
 
     }
 
+
+     // Don't perform unnecessary update
+    if (application.status === status) {
+      return res.status(200).json({
+        success: true,
+        message: `Application is already ${status}`,
+        application,
+      });
+    }
+
+
     application.status = status;
 
     await application.save();
 
+    try{
     await sendStatusEmail(
       application.user.email,
       application.user.name,
       application.job.title,
       status
     )
+   } catch (emailError) {
+      console.error(
+        "Status email failed:",
+        emailError.message
+      );
+    }
 
-    res.json({
+    return res.status(200).json({
       success: true,
-      message: "Application status updated successfully",
+      message: `Application status changed to ${status}`,
+      application,
     });
 
   } catch (error) {
+    console.error(
+      "Update application status error:",
+      error
+    );
 
-    console.log(error);
-  
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to update application status",
     });
-
   }
-
 };
 
 
