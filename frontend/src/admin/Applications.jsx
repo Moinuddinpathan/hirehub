@@ -46,23 +46,70 @@ const [statusFilter, setStatusFilter] = useState("All");
     }
   };
 
-  const changeStatus = async (id, status) => {
+  const changeStatus = async (id, newStatus) => {
 
     try {
-        await updateApplicationStatus(id, status);
-        
-        alert("Application Updated");
+      setStatusUpdatingId(id);
 
-        fetchApplications();
-    } catch (error) {
-        // console.log(error);
-         console.log("STATUS ERROR:", error);
-  console.log("BACKEND RESPONSE:", error.response?.data);
-  console.log("STATUS CODE:", error.response?.status);
-        alert("Update Failed")
+    setStatusMessage("");
+    setStatusError("");
+
+// Wait for backend confirmation
+         const response = await updateApplicationStatus(
+      id,
+      newStatus
+    );
         
-    }
+        
+    // Update application inside table
+    setApplications((previousApplications) =>
+      previousApplications.map((app) =>
+        app._id === id
+          ? {
+              ...app,
+              status: newStatus,
+            }
+          : app
+      )
+    );
+
+     // Update application inside open modal
+    setSelectedApplication((previous) => {
+      if (!previous || previous._id !== id) {
+        return previous;
+      }
+
+        
+      return {
+        ...previous,
+        status: newStatus,
+      };
+    });
+
+    setStatusMessage(
+      response.data?.message ||
+        `Application moved to ${newStatus}`
+    );
+
+    return true;
+
+  } catch (error) {
+    console.error(
+      "Status update error:",
+      error.response?.data || error
+    );
+
+    setStatusError(
+      error.response?.data?.message ||
+        "Unable to update application status."
+    );
+
+    return false;
+
+  } finally {
+    setStatusUpdatingId(null);
   }
+};
 
 
   const applicationStats = {
@@ -148,13 +195,66 @@ const [statusFilter, setStatusFilter] = useState("All");
 
     <h1>Applications</h1>
 
-    <p>
+    <p> 
       Review candidates, manage application progress
       and make hiring decisions.
     </p>
   </div>
 
 </div>
+
+ {/* =========================
+      STATUS NOTIFICATIONS
+  ========================= */}
+
+  {statusMessage && (
+    <div className="application-notification success">
+
+      <div>
+        <strong>Status updated</strong>
+        <span>{statusMessage}</span>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setStatusMessage("")}
+        aria-label="Close notification"
+      >
+        ×
+      </button>
+
+    </div>
+  )}
+
+  {statusError && (
+    <div className="application-notification error">
+
+      <div>
+        <strong>Unable to update status</strong>
+        <span>{statusError}</span>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setStatusError("")}
+        aria-label="Close notification"
+      >
+        ×
+      </button>
+
+    </div>
+  )}
+
+
+  {/* =========================
+      APPLICATION STATISTICS
+  ========================= */}
+
+ 
+
+
+
+
 
 <div className="application-summary-grid">
 
@@ -226,11 +326,9 @@ const [statusFilter, setStatusFilter] = useState("All");
   </div>
 
   <select
-    className="applications-status-filter"
+     className="application-status-select"
     value={statusFilter}
-    onChange={(e) =>
-      setStatusFilter(e.target.value)
-    }
+    onChange={(e) => setStatusFilter(e.target.value)}
   >
     <option value="All">
       All Statuses
@@ -326,19 +424,27 @@ const [statusFilter, setStatusFilter] = useState("All");
       </td>
 
       <td>
-        <select
-          className="application-status-select"
-          value={app.status}
-          onChange={(e) =>
-            changeStatus(app._id, e.target.value)
-          }
-        >
-          <option value="Pending">Pending</option>
-          <option value="Reviewed">Reviewed</option>
-          <option value="Selected">Selected</option>
-          <option value="Rejected">Rejected</option>
-        </select>
-      </td>
+  <select
+    className="candidate-status-select"
+    value={app.status}
+    disabled={statusUpdatingId === app._id}
+    onChange={(e) =>
+      changeStatus(app._id, e.target.value)
+    }
+  >
+    <option value="Pending">Pending</option>
+    <option value="Reviewed">Reviewed</option>
+    <option value="Selected">Selected</option>
+    <option value="Rejected">Rejected</option>
+  </select>
+
+  {statusUpdatingId === app._id && (
+    <div className="status-update-loading">
+      <span className="status-mini-spinner"></span>
+      Updating application...
+    </div>
+  )}
+</td>
     </tr>
   ))}
 </tbody>

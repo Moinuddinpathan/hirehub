@@ -482,10 +482,18 @@
 
 .candidate-modal .modal-dialog {
   max-width: 1050px;
+
+  height: calc(100vh - 40px);
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .candidate-modal-content {
+  max-height: calc(100vh - 40px);
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
 
   border: none;
   border-radius: 16px;
@@ -501,6 +509,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+    flex-shrink: 0;
 
   gap: 25px;
 
@@ -615,6 +625,12 @@
   padding: 28px 30px;
 
   background: #f8fafc;
+
+  /* Scrollable area */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .candidate-main-column {
@@ -921,6 +937,8 @@
   display: flex;
   justify-content: flex-end;
 
+    flex-shrink: 0;
+
   padding: 16px 30px;
 
   background: #ffffff;
@@ -958,4 +976,116 @@
   .candidate-info-grid {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* =========================================
+   STATUS UPDATE NOTIFICATIONS
+========================================= */
+
+.application-notification {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+  padding: 14px 16px;
+
+  border-radius: 10px;
+}
+
+.application-notification > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.application-notification strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.application-notification span {
+  font-size: 11px;
+}
+
+.application-notification.success {
+  background: #f0fdf4;
+  color: #166534;
+
+  border: 1px solid #bbf7d0;
+}
+
+.application-notification.error {
+  background: #fef2f2;
+  color: #991b1b;
+
+  border: 1px solid #fecaca;
+}
+
+.application-notification button {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: transparent;
+  color: inherit;
+
+  border: none;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   STATUS LOADING
+========================================= */
+
+.status-update-loading {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 10px;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+.status-mini-spinner {
+  width: 13px;
+  height: 13px;
+
+  border: 2px solid #cbd5e1;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+
+  animation: statusSpin 0.7s linear infinite;
+}
+
+@keyframes statusSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* Disable dropdown while API is processing */
+
+.application-status-select:disabled,
+.candidate-status-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

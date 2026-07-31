@@ -28,7 +28,9 @@ const applyJob = async (req, res) => {
         const application = await Application.create({
             user: req.user._id,
             job,
-            resume: req.file ? req.file.path : "",
+            resume: req.file
+  ? `uploads/resumes/${req.file.filename}`
+  : "",
             skills,
 
   experience,
