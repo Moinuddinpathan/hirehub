@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { applyJob } from "../services/applicationService";
 import { useEffect } from "react";
+import "../styles/ApplyJob.css";
 import { getJobById } from "../services/jobService";
 
 function ApplyJob(){
@@ -77,6 +78,22 @@ useEffect(() => {
 
 
     return (
+
+      <>
+         <div className="apply-topbar">
+
+      <button
+        className="back-button"
+        onClick={() =>
+          navigate(`/jobs/${id}`)
+        }
+      >
+        ← Back to Job Details
+      </button>
+
+    </div>
+
+       
         <div className="container mt-5">
         <div className="row justify-content-center">
             <div className="col-md-6">
@@ -248,6 +265,8 @@ useEffect(() => {
             </div>
         </div>
         </div>
+
+         </>
     )
 }
 

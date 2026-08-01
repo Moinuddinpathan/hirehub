@@ -16,6 +16,9 @@ const addJob = async (req, res) => {
       lastDate,
     } = req.body;
 
+
+
+
     const job = await Job.create({
       title,
       company,
@@ -87,6 +90,40 @@ const getJobById = async (req, res)=>{
         message: error.message,
     });
 }
+};
+
+
+
+const getSimilarJobs = async (req, res) => {
+  try {
+
+    const currentJob = await Job.findById(req.params.id);
+
+    if (!currentJob) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
+
+    const jobs = await Job.find({
+      _id: { $ne: currentJob._id },
+    })
+      .limit(3);
+
+    res.json({
+      success: true,
+      jobs,
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
 };
 
 
@@ -194,6 +231,7 @@ module.exports = {
     addJob,
     getJobs,
     getJobById,
+    getSimilarJobs,
     updateJob,
     deleteJob,
 }

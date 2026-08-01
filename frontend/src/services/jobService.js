@@ -22,3 +22,7 @@ export const addJob = (formData) => {
   });
 };
 
+
+export const getSimilarJobs = (id) => {
+  return api.get(`/jobs/${id}/similar`);
+};

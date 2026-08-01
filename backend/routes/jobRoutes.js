@@ -6,6 +6,7 @@ const {
     addJob,
     getJobs,
     getJobById,
+    getSimilarJobs,
     updateJob,
     deleteJob,
  } = require("../controllers/jobController")
@@ -17,6 +18,12 @@ const {
  router.get("/", getJobs);
 
  router.get("/:id", getJobById);
+
+ router.get(
+  "/:id/similar",
+  getSimilarJobs
+);
+
 
  router.put("/:id", updateJob);
 
