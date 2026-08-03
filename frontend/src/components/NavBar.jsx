@@ -1,84 +1,233 @@
   import { Link } from "react-router-dom";
   import { useAuth } from "../context/AuthContext";
+  import { NavLink, useNavigate } from "react-router-dom";
+  import { useState } from "react";
+  import "./Navbar.css";  
 
   function Navbar() {
 
-    const { isLoggedIn } = useAuth();
+      const {
+    isLoggedIn,
+    user,
+    logout
+} = useAuth();
 
+const navigate = useNavigate();
+
+
+const [search, setSearch] = useState("");
+
+
+    const [showMenu, setShowMenu] = useState(false);
+    // const search = params.get("search");
+   
+   
+
+    // const params = new URLSearchParams(location.search);
+
+// const urlSearch = params.get("search") || "";
+
+const handleSearch = () => {
+
+    if (!search.trim()) return;
+
+    navigate(`/jobs?search=${encodeURIComponent(search)}`);
+
+};
   
 
+  // navigate(`/jobs?search=${search}`);
+
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div className="container">
+<nav className="navbar">
 
-          <Link className="navbar-brand" to="/">
-            Job Portal
-          </Link>
+    <div className="navbar-container">
 
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+        {/* Left */}
 
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
+        <Link to="/" className="navbar-logo">
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/">
-                Home
-                
-                </Link>
-              </li>
+            <span className="logo-icon">💼</span>
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/jobs">
-                Jobs
-                
-                </Link>
-              </li>
+            <span className="logo-text">
+                JobPortal
+            </span>
 
-              <li className="nav-item">
-                {!isLoggedIn && (
-    <Link className="nav-link" to="/login">
-      Login
-    </Link>
-  )}
-              </li>
-
-              <li className="nav-item">
-                {!isLoggedIn && (
-    <Link className="nav-link" to="/register">
-      Register
-    </Link>
-  )}
-              </li>
-
-              <li className="nav-item">
-                {isLoggedIn && (
-    <Link className="nav-link" to="/profile">
-      Profile
-    </Link>
-  )}
-
-              </li>
-
-              <li className="nav-item">
-              {isLoggedIn && (
-    <Link className="nav-link" to="/my-applications">
-      My Applications
-    </Link>
-  )}
-              </li>
+        </Link>
 
 
-            </ul>
-          </div>
+        {/* Center */}
+
+        <div className="navbar-search">
+
+            <input
+    type="text"
+    placeholder="Search jobs, companies, locations..."
+
+    value={search}
+
+    onChange={(e) => setSearch(e.target.value)}
+
+    onKeyDown={(e) => {
+
+        if (e.key === "Enter") {
+
+            handleSearch();
+
+        }
+
+    }}
+/>
+
+<button
+    className="search-btn"
+    onClick={handleSearch}
+>
+    Search
+</button>
+
         </div>
-      </nav>
+
+
+        {/* Right */}
+
+        <div className="navbar-right">
+
+    <NavLink
+        to="/"
+        end
+        className={({ isActive }) =>
+            isActive ? "nav-item active" : "nav-item"
+        }
+    >
+        Home
+    </NavLink>
+
+    <NavLink
+        to="/jobs"
+        className={({ isActive }) =>
+            isActive ? "nav-item active" : "nav-item"
+        }
+    >
+        Jobs
+    </NavLink>
+
+    {isLoggedIn && (
+
+        <NavLink
+            to="/saved-jobs"
+            className={({ isActive }) =>
+                isActive ? "nav-item active" : "nav-item"
+            }
+        >
+            Saved
+        </NavLink>
+
+    )}
+
+    {isLoggedIn && (
+
+        <NavLink
+            to="/my-applications"
+            className={({ isActive }) =>
+                isActive ? "nav-item active" : "nav-item"
+            }
+        >
+            Applications
+        </NavLink>
+
+    )}
+
+    {isLoggedIn ? (
+
+        <div className="profile-menu">
+
+    <button
+        className="profile-button"
+        onClick={() => setShowMenu(!showMenu)}
+    >
+
+        <div className="avatar">
+
+            {user?.name?.charAt(0).toUpperCase() || "U"}
+
+        </div>
+
+        <span>
+
+            {user?.name || "Profile"}
+
+        </span>
+
+        ▼
+
+    </button>
+
+    {showMenu && (
+
+        <div className="profile-dropdown">
+
+            <Link to="/profile">
+
+                My Profile
+
+            </Link>
+
+            <Link to="/saved-jobs">
+
+                Saved Jobs
+
+            </Link>
+
+            <Link to="/my-applications">
+
+                Applications
+
+            </Link>
+
+           <button
+    onClick={logout}
+>
+
+Logout
+
+</button>
+
+        </div>
+
+    )}
+
+</div>
+
+    ) : (
+
+        <>
+            <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                    isActive ? "nav-item active" : "nav-item"
+                }
+            >
+                Login
+            </NavLink>
+
+            <NavLink
+                to="/register"
+                className={({ isActive }) =>
+                    isActive ? "nav-item active" : "nav-item"
+                }
+            >
+                Register
+            </NavLink>
+        </>
+
+    )}
+
+</div>
+
+    </div>
+
+</nav>
     );
   }
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../styles/JobDetails.css";
 import { getJobById, getSimilarJobs } from "../services/jobService";
+import { saveJob, removeSavedJob, getSavedJobs, } from "../services/savedJobService";
 
 function JobDetails() {
 
@@ -14,10 +15,14 @@ function JobDetails() {
 
     const [similarJobs, setSimilarJobs] = useState([]);
 
+    const [saved, setSaved] = useState(false);
+
     useEffect(()=>{
         fetchJob();
 
         fetchSimilarJobs();
+
+        checkSavedJob();
     }, [id])
 
     const fetchJob = async () => {
@@ -46,6 +51,68 @@ function JobDetails() {
 
 };
 
+
+const checkSavedJob = async () => {
+
+  try {
+
+    const response = await getSavedJobs();
+
+    const alreadySaved =
+      response.data.savedJobs.some(
+        (savedJob) =>
+          savedJob.job._id === id
+      );
+
+    setSaved(alreadySaved);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
+
+
+
+const handleSaveJob = async () => {
+
+  try {
+
+    if (!saved) {
+
+      await saveJob(job._id);
+
+      setSaved(true);
+
+      alert("Job saved successfully.");
+
+    } else {
+
+      await removeSavedJob(job._id);
+
+      setSaved(false);
+
+      alert("Job removed from saved jobs.");
+
+    }
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(
+      error.response?.data?.message ||
+      "Something went wrong."
+    );
+
+  }
+
+};
+
+
+
     if(!job){
         return <h2 className="text-center mt-5">Loading...</h2>;
     }
@@ -54,6 +121,41 @@ function JobDetails() {
   ? `http://localhost:5000/${job.logo.replace(/\\/g, "/")}`
   : null;
 
+    const handleShare = async () => {
+
+  const shareData = {
+
+    title: job.title,
+
+    text: `Check out this job at ${job.company}`,
+
+    url: window.location.href,
+
+  };
+
+  try {
+
+    if (navigator.share) {
+
+      await navigator.share(shareData);
+
+    } else {
+
+      await navigator.clipboard.writeText(
+        window.location.href
+      );
+
+      alert("Job link copied to clipboard.");
+
+    }
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
 
     return (
 
@@ -337,13 +439,19 @@ function JobDetails() {
       Apply Now
     </button>
 
-    <button className="save-button">
-      Save Job
-    </button>
+    <button
+  className="save-button"
+  onClick={handleSaveJob}
+>
+  {saved ? "❤️ Saved" : "🤍 Save Job"}
+</button>
 
-    <button className="share-button">
-      Share Job
-    </button>
+    <button
+  className="share-button"
+  onClick={handleShare}
+>
+  Share Job
+</button>
 
   </div>
 
@@ -421,7 +529,46 @@ function JobDetails() {
 
 </div>
 
+        {/* ===========================
+      SIMILAR JOBS
+=========================== */}
 
+<section className="similar-jobs">
+
+    <h2>Similar Jobs</h2>
+
+    <div className="similar-jobs-grid">
+
+        {similarJobs.map((item) => (
+
+            <div
+                key={item._id}
+                className="similar-job-card"
+            >
+
+                <h3>{item.title}</h3>
+
+                <p>{item.company}</p>
+
+                <span>
+                    📍 {item.location}
+                </span>
+
+                <button
+                    onClick={() =>
+                        navigate(`/jobs/${item._id}`)
+                    }
+                >
+                    View Details
+                </button>
+
+            </div>
+
+        ))}
+
+    </div>
+
+</section>
 
 </div>
 </div>

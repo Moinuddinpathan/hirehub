@@ -51,19 +51,70 @@ workMode,
 };
 
 const getJobs = async (req, res) => {
-  try {
-    const jobs = await Job.find();
 
-    res.json({
-      success: true,
-      jobs,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+  console.log("Search Query:", req.query.search);
+
+    try {
+
+        const { search } = req.query;
+
+        let query = {};
+
+        if (search) {
+
+            query = {
+
+                $or: [
+
+                    {
+                        title: {
+                            $regex: search,
+                            $options: "i",
+                        },
+                    },
+
+                    {
+                        company: {
+                            $regex: search,
+                            $options: "i",
+                        },
+                    },
+
+                    {
+                        location: {
+                            $regex: search,
+                            $options: "i",
+                        },
+                    },
+
+                ],
+
+            };
+
+        }
+
+        const jobs = await Job.find(query);
+
+        res.status(200).json({
+
+            success: true,
+
+            jobs,
+
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+
+            success: false,
+
+            message: error.message,
+
+        });
+
+    }
+
 };
 
 

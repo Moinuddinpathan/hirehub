@@ -11,8 +11,11 @@
   import Dashboard from "./admin/Dashboard";
   import MyApplications from "./pages/MyApplications";
   import ApplyJob from "./pages/ApplyJob";
+  import SavedJobs from "./pages/SavedJobs";
+
+
   import ManageUsers from "./admin/ManageUsers";
-  import ManageJobs from "./admin/ManageJobs";
+  import ManageJobs from "./admin/ManageJobs" ;
   import Applications from "./admin/Applications";
   // import AdminRoute from "./components/AdminRoute";
   import GoogleSuccess from "./pages/GoogleSuccess";
@@ -78,6 +81,12 @@
           path="/jobs/:id"
           element={<JobsDetails />}
         />
+
+        <Route
+  path="/saved-jobs"
+  element={<SavedJobs />}
+/>
+
 
         <Route
           path="/profile"

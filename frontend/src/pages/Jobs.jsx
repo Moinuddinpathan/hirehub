@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import JobCard from "../components/JobCard"
 import { getJobs } from "../services/jobService";
+import { Link, useLocation } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
 function Jobs(){
@@ -10,35 +11,41 @@ function Jobs(){
     const [loading, setLoading] = useState(true);
 
      // Search and filter states
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("");
   const [workMode, setWorkMode] = useState("");
+
+ 
 
 
      // Read query parameters from URL
   const [searchParams] = useSearchParams();
 
-  const company = searchParams.get("company");
+const company = searchParams.get("company");
 
+const urlSearch = searchParams.get("search") || "";
+
+console.log(urlSearch);
 
 
 
     useEffect(()=>{
         fetchJobs();
-    }, [])
+    }, [urlSearch]);
 
     const fetchJobs = async () => {
-        try {
-            const response = await getJobs();
+    try {
 
-            setJobs(response.data.jobs)
-        } catch(error) {
-            console.log("Error fetching jobs:",error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        const response = await getJobs(urlSearch);
+
+        setJobs(response.data.jobs);
+    } catch (error) {
+        console.log("Error fetching jobs:", error);
+    } finally {
+        setLoading(false);
+    }
+};
 
  // Filter jobs
   const filteredJobs = jobs.filter((job) => {
@@ -53,7 +60,7 @@ function Jobs(){
     // Search filter
     // Search title, company, skills
     // ---------------------------
-    const searchText = search.toLowerCase().trim();
+    const searchText = urlSearch.toLowerCase().trim();
 
     const skillsText = Array.isArray(job.skills)
       ? job.skills.join(" ").toLowerCase()
@@ -96,7 +103,7 @@ function Jobs(){
   });
 
   const clearFilters = () => {
-    setSearch("");
+    // setSearch("");
     setLocation("");
     setJobType("");
     setWorkMode("");

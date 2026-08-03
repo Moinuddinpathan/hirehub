@@ -13,10 +13,13 @@ const cookieParser = require("cookie-parser");
 
 const connectDB = require("./config/db");
 
-const jobRoutes = require("./routes/jobRoutes");
 const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
+const jobRoutes = require("./routes/jobRoutes");
 const applicationRoutes = require("./routes/applicationRoutes");
+const savedJobRoutes = require("./routes/savedJobRoutes")
+
+const userRoutes = require("./routes/userRoutes");
+
 const adminRoutes = require("./routes/adminRoutes");
 
 // dotenv.config();
@@ -50,13 +53,15 @@ app.use(passport.session());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes)
 app.use("/api/applications", applicationRoutes)
+app.use("/api/saved-jobs", savedJobRoutes);
 
 
 app.use("/api/users", userRoutes);
 
-app.use("/api/auth", authRoutes);
+
 // Test Route
 app.get("/", (req, res) => {
   res.send("Job Portal API Running...");
