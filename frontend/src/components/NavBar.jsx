@@ -3,6 +3,7 @@
   import { NavLink, useNavigate } from "react-router-dom";
   import { useState } from "react";
   import "./Navbar.css";  
+  import logo from "../assets/llogo.png";
 
   function Navbar() {
 
@@ -46,14 +47,14 @@ const handleSearch = () => {
         {/* Left */}
 
         <Link to="/" className="navbar-logo">
+    <img
+        src={logo}
+        alt="HireHub"
+        className="logo-image"
+    />
 
-            <span className="logo-icon">💼</span>
-
-            <span className="logo-text">
-                JobPortal
-            </span>
-
-        </Link>
+   
+</Link>
 
 
         {/* Center */}
