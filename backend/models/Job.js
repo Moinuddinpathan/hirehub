@@ -57,6 +57,17 @@ status: {
       },
     ],
 
+     benefits: {
+        type: [String],
+        default: []
+    },
+
+    responsibilities: {
+        type: [String],
+        default: []
+    },
+
+
     description: {
       type: String,
       required: true,

@@ -1,13 +1,12 @@
-import { getJobs } from "../services/jobService";
 import { useEffect, useState } from "react";
-import { Link, useNavigate  } from "react-router-dom";
+import { getJobs } from "../services/jobService";
+import JobCard from "./JobCard";
 import "./LatestJobs.css";
 
 
+function LatestJobs() {
 
-function LatestJobs(){
-
-   const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
 
@@ -17,70 +16,120 @@ function LatestJobs(){
 
 
   const fetchJobs = async () => {
+
     try {
+
       const response = await getJobs();
 
-       // Take newest jobs first and show only 6
-       const latestJobs = response.data.jobs
-       .sort(
+      // Get jobs from API
+      const allJobs = response.data.jobs || [];
+
+      // Newest jobs first and show only 6
+      const latestJobs = allJobs
+        .sort(
           (a, b) =>
             new Date(b.createdAt) - new Date(a.createdAt)
-          )
-          .slice(0, 6);
+        )
+        .slice(0, 6);
 
-          setJobs(latestJobs) ;
-    } catch {
-      console.log("Failed to fetch latest jobs:", error);
+      setJobs(latestJobs);
+
+    } catch (error) {
+
+      console.log(
+        "Failed to fetch latest jobs:",
+        error
+      );
+
     } finally {
-      setLoading(false);
-    };
-  }
 
+      setLoading(false);
+
+    }
+  };
+
+
+  /* Loading */
   if (loading) {
+
     return (
-      <section className="latest-jobs">
-        <div className="container">
-          <h2>Latest Jobs</h2>
-          <p>Loading jobs...</p>
+      <section className="latest-jobs-section">
+
+        <div className="latest-jobs-container">
+
+          <div className="latest-jobs-header">
+
+            <h2>Latest Jobs</h2>
+
+            <p>
+              Explore the newest opportunities from top companies.
+            </p>
+
+          </div>
+
+          <p className="loading-text">
+            Loading jobs...
+          </p>
+
         </div>
+
       </section>
     );
   }
 
 
-    return(
-       <section className="latest-jobs">
-        <div className="container">
-              <h2>Latest Jobs</h2>
-        <p>Explore the newest opportunities from top companies.</p>
+  return (
 
-            <div className="jobs-grid">
-                {
-                    jobs.map((job) => (
-                        <div className="job-card" key={job._id}>
-                           {job.logo && (
-  <img src={job.logo} alt={job.company} />
-)}
+    <section className="latest-jobs-section">
 
-                             <h3>{job.title}</h3>
+      <div className="latest-jobs-container">
 
-              <h5>{job.company}</h5>
 
-              <p>📍 {job.location}</p>
+        {/* Section Heading */}
 
-              <p>💰 {job.salary}</p>
+        <div className="latest-jobs-header">
 
-              <span>{job.type}</span>
+          <h2>Latest Jobs</h2>
 
-              <button>Apply Now</button>
+          <p>
+            Explore the newest opportunities from top companies.
+          </p>
 
-              </div>
-                    ))
-                }
-            </div>
         </div>
-       </section>
-    )
+
+
+        {/* Jobs Grid */}
+
+        <div className="jobs-grid">
+
+          {jobs.length > 0 ? (
+
+            jobs.map((job) => (
+
+              <JobCard
+                key={job._id}
+                job={job}
+              />
+
+            ))
+
+          ) : (
+
+            <p className="no-jobs">
+              No jobs available.
+            </p>
+
+          )}
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+  );
 }
+
 
 export default LatestJobs;

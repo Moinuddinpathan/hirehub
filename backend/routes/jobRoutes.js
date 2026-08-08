@@ -17,12 +17,14 @@ const {
 
  router.get("/", getJobs);
 
- router.get("/:id", getJobById);
-
- router.get(
+  router.get(
   "/:id/similar",
   getSimilarJobs
 );
+
+ router.get("/:id", getJobById);
+
+
 
 
  router.put("/:id", updateJob);

@@ -15,6 +15,8 @@ function CreateJob() {
     jobType: "",
     workMode: "",
     skills: "",
+     benefits: "",
+  responsibilities: "",
     description: "",
     lastDate: "",
   });
@@ -59,6 +61,15 @@ function CreateJob() {
       data.append("jobType", formData.jobType);
       data.append("workMode", formData.workMode);
       data.append("skills", formData.skills);
+
+      data.append("benefits", formData.benefits);
+
+data.append(
+  "responsibilities",
+  formData.responsibilities
+);
+
+
       data.append("description", formData.description);
       data.append("lastDate", formData.lastDate);
 
@@ -512,6 +523,57 @@ for (const [key, value] of data.entries()) {
             />
 
           </div>
+
+          {/* Responsibilities */}
+
+<div className="form-group">
+
+  <label htmlFor="responsibilities">
+    Responsibilities
+  </label>
+
+  <textarea
+    id="responsibilities"
+    name="responsibilities"
+    rows="6"
+    placeholder={`Example:
+Develop and maintain web applications
+Work with frontend and backend developers
+Fix bugs and improve performance
+Participate in code reviews`}
+    value={formData.responsibilities}
+    onChange={handleChange}
+  />
+
+  <small className="field-help">
+    Enter one responsibility per line.
+  </small>
+
+</div>
+
+
+{/* Benefits */}
+
+<div className="form-group">
+
+  <label htmlFor="benefits">
+    Employee Benefits
+  </label>
+
+  <input
+    id="benefits"
+    type="text"
+    name="benefits"
+    placeholder="e.g. Health Insurance, Work From Home, Paid Leave"
+    value={formData.benefits}
+    onChange={handleChange}
+  />
+
+  <small className="field-help">
+    Separate multiple benefits using commas.
+  </small>
+
+</div>
 
         </section>
 

@@ -12,6 +12,8 @@ const addJob = async (req, res) => {
       jobType,
       workMode,
       skills,
+      benefits,
+  responsibilities,
       description,
       lastDate,
     } = req.body;
@@ -27,7 +29,23 @@ const addJob = async (req, res) => {
       experience,
       jobType,
 workMode,
-      skills: skills ? skills.split(",") : [],
+        skills: skills
+    ? skills.split(",").map((skill) => skill.trim()).filter(Boolean)
+    : [],
+
+  responsibilities: responsibilities
+    ? responsibilities
+        .split("\n")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : [],
+
+  benefits: benefits
+    ? benefits
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    : [],
       description,
       lastDate,
 
@@ -146,37 +164,90 @@ const getJobById = async (req, res)=>{
 
 
 const getSimilarJobs = async (req, res) => {
-  try {
+    try {
+        // Get the current job
+        const currentJob = await Job.findById(req.params.id);
 
-    const currentJob = await Job.findById(req.params.id);
+        // If job doesn't exist
+        if (!currentJob) {
+            return res.status(404).json({
+                success: false,
+                message: "Job not found",
+            });
+        }
 
-    if (!currentJob) {
-      return res.status(404).json({
-        success: false,
-        message: "Job not found",
-      });
+        // Create conditions for finding similar jobs
+        const conditions = [];
+
+        // 1. Match location
+        if (currentJob.location) {
+            conditions.push({
+                location: {
+                    $regex: currentJob.location,
+                    $options: "i",
+                },
+            });
+        }
+
+        // 2. Match job type
+        if (currentJob.jobType) {
+            conditions.push({
+                jobType: currentJob.jobType,
+            });
+        }
+
+        // 3. Match work mode
+        if (currentJob.workMode) {
+            conditions.push({
+                workMode: currentJob.workMode,
+            });
+        }
+
+        // 4. Match job title
+        if (currentJob.title) {
+            conditions.push({
+                title: {
+                    $regex: currentJob.title,
+                    $options: "i",
+                },
+            });
+        }
+
+        // 5. Match skills
+        if (Array.isArray(currentJob.skills) && currentJob.skills.length > 0) {
+            conditions.push({
+                skills: {
+                    $in: currentJob.skills,
+                },
+            });
+        }
+
+        // Find similar jobs
+        const similarJobs = await Job.find({
+            _id: {
+                $ne: currentJob._id,
+            },
+
+            $or: conditions,
+        })
+            .sort({ createdAt: -1 })
+            .limit(3);
+
+        res.status(200).json({
+            success: true,
+            jobs: similarJobs,
+        });
+
+    } catch (error) {
+        console.error("Error fetching similar jobs:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch similar jobs",
+            error: error.message,
+        });
     }
-
-    const jobs = await Job.find({
-      _id: { $ne: currentJob._id },
-    })
-      .limit(3);
-
-    res.json({
-      success: true,
-      jobs,
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-
-  }
 };
-
 
 const updateJob = async (req, res) => {
   try {
@@ -201,6 +272,8 @@ const updateJob = async (req, res) => {
       jobType,
       workMode,
       skills,
+        benefits,
+  responsibilities,
       description,
       lastDate,
       status,
@@ -231,6 +304,26 @@ const updateJob = async (req, res) => {
             .map((skill) => skill.trim())
             .filter(Boolean);
     }
+
+// Update responsibilities
+if (responsibilities !== undefined) {
+  job.responsibilities = Array.isArray(responsibilities)
+    ? responsibilities
+    : responsibilities
+        .split("\n")
+        .map((item) => item.trim())
+        .filter(Boolean);
+}
+
+// Update benefits
+if (benefits !== undefined) {
+  job.benefits = Array.isArray(benefits)
+    ? benefits
+    : benefits
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+}
 
     // Replace logo only when a new one was uploaded
     if (req.file) {

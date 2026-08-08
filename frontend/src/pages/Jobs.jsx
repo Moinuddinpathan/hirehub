@@ -135,12 +135,12 @@ console.log(urlSearch);
         </p>
       )}
 
-      <div className="row">
+      <div className="row g-4">
 
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
             <div
-              className="col-md-4 mb-4"
+               className="col-lg-6"
               key={job._id}
             >
               <JobCard job={job} />

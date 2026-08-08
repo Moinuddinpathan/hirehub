@@ -1,84 +1,103 @@
 import { Link } from "react-router-dom";
+import "./JobCard.css";
 
-function JobCard({job}) {
+function JobCard({ job }) {
 
-    const logoUrl = job.logo
+  const logoUrl = job.logo
     ? `http://localhost:5000/${job.logo.replace(/\\/g, "/")}`
     : null;
 
+  return (
+    <div className="job-card">
 
-    return(
-        <div className="card shadow h-100">
-      <div className="card-body">
+      {/* Top Section */}
+      <div className="job-card-top">
 
         {/* Company Logo */}
-        <div className="text-center mb-3">
+        <div className="company-logo">
+
           {logoUrl ? (
             <img
               src={logoUrl}
               alt={`${job.company} logo`}
-              style={{
-                width: "70px",
-                height: "70px",
-                objectFit: "contain",
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+
+                e.currentTarget.parentElement.classList.add(
+                  "logo-fallback"
+                );
+
+                e.currentTarget.parentElement.innerText =
+                  job.company?.charAt(0).toUpperCase() || "C";
               }}
             />
           ) : (
-            <div
-              className="bg-light rounded d-flex align-items-center justify-content-center mx-auto"
-              style={{
-                width: "70px",
-                height: "70px",
-                fontWeight: "bold",
-              }}
-            >
-              {job.company?.charAt(0).toUpperCase()}
+            <div className="logo-fallback">
+              {job.company?.charAt(0).toUpperCase() || "C"}
             </div>
           )}
+
         </div>
 
-        <h4>{job.title}</h4>
 
-        <h5 className="text-primary">
-          {job.company}
-        </h5>
+        {/* Job Title and Company */}
+        <div className="job-title-section">
 
-        <p>
-          <strong>Location: </strong>
-          {job.location}
-        </p>
+          <h3>{job.title}</h3>
 
-        <p>
-          <strong>Salary: </strong>
-          {job.salary}
-        </p>
+          <p className="company-name">
+            {job.company}
+          </p>
 
-        <div className="mb-3">
-
-  {job.jobType && (
-    <span className="badge bg-primary me-2">
-      {job.jobType}
-    </span>
-  )}
-
-  {job.workMode && (
-    <span className="badge bg-secondary">
-      {job.workMode}
-    </span>
-  )}
-
-</div>
-
-        <Link
-          to={`/jobs/${job._id}`}   
-          className="btn btn-primary w-100"
-        >
-          View Details
-        </Link>
+        </div>
 
       </div>
+
+
+      {/* Job Information */}
+      <div className="job-info">
+
+        <div className="job-info-item">
+          <span>📍</span>
+          <span>{job.location}</span>
+        </div>
+
+        <div className="job-info-item">
+          <span>💰</span>
+          <span>{job.salary}</span>
+        </div>
+
+      </div>
+
+
+      {/* Job Tags */}
+      <div className="job-tags">
+
+        {job.jobType && (
+          <span className="job-tag primary-tag">
+            {job.jobType}
+          </span>
+        )}
+
+        {job.workMode && (
+          <span className="job-tag secondary-tag">
+            {job.workMode}
+          </span>
+        )}
+
+      </div>
+
+
+      {/* View Details Button */}
+      <Link
+        to={`/jobs/${job._id}`}
+        className="view-job-btn"
+      >
+        View Details
+      </Link>
+
     </div>
-    )
+  );
 }
 
-export default JobCard
+export default JobCard;

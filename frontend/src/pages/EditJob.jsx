@@ -27,6 +27,8 @@ function EditJob() {
     jobType: "",
     workMode: "",
     skills: "",
+    benefits: "",
+    responsibilities: "",
     description: "",
     lastDate: "",
     status: "Active",
@@ -57,6 +59,14 @@ function EditJob() {
           skills: Array.isArray(job.skills)
             ? job.skills.join(", ")
             : job.skills || "",
+            benefits: Array.isArray(job.benefits)
+    ? job.benefits.join(", ")
+    : job.benefits || "",
+
+  responsibilities: Array.isArray(job.responsibilities)
+    ? job.responsibilities.join("\n")
+    : job.responsibilities || "",
+
           description: job.description || "",
 
           // HTML date input needs YYYY-MM-DD
@@ -127,6 +137,12 @@ function EditJob() {
       data.append("jobType", formData.jobType);
       data.append("workMode", formData.workMode);
       data.append("skills", formData.skills);
+      data.append("benefits", formData.benefits);
+
+data.append(
+  "responsibilities",
+  formData.responsibilities
+);
       data.append("description", formData.description);
       data.append("lastDate", formData.lastDate);
       data.append("status", formData.status);
@@ -482,6 +498,46 @@ function EditJob() {
               required
             />
           </div>
+
+          <div className="form-group">
+  <label>
+    Responsibilities <span>*</span>
+  </label>
+
+  <textarea
+    name="responsibilities"
+    rows="7"
+    value={formData.responsibilities}
+    onChange={handleChange}
+    placeholder={`Develop and maintain web applications.
+Collaborate with designers and developers.
+Write clean and reusable code.
+Fix bugs and improve performance.`}
+    required
+  />
+
+  <small className="field-help">
+    Enter one responsibility per line.
+  </small>
+</div>
+
+<div className="form-group">
+  <label>
+    Employee Benefits
+  </label>
+
+  <textarea
+    name="benefits"
+    rows="5"
+    value={formData.benefits}
+    onChange={handleChange}
+    placeholder="Health Insurance, Work From Home, Flexible Working Hours, Paid Leave"
+  />
+
+  <small className="field-help">
+    Separate benefits using commas.
+  </small>
+</div>
 
         </section>
 

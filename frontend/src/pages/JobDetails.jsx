@@ -10,6 +10,7 @@ function JobDetails() {
     const { id } = useParams()
 
     // const { id } = useParams();
+        const navigate = useNavigate();
 
     const [job, setJob] = useState(null);
 
@@ -35,20 +36,19 @@ function JobDetails() {
         }
     };
 
-    const fetchSimilarJobs = async () => {
+ const fetchSimilarJobs = async () => {
+    try {
+        const response = await getSimilarJobs(id);
 
-  try {
+        const filteredJobs = response.data.jobs.filter(
+            (item) => item._id !== id
+        );
 
-    const response = await getSimilarJobs(id);
+        setSimilarJobs(filteredJobs);
 
-    setSimilarJobs(response.data.jobs);
-
-  } catch (error) {
-
-    console.log(error);
-
-  }
-
+    } catch (error) {
+        console.log("Failed to fetch similar jobs:", error);
+    }
 };
 
 
@@ -58,11 +58,11 @@ const checkSavedJob = async () => {
 
     const response = await getSavedJobs();
 
-    const alreadySaved =
-      response.data.savedJobs.some(
-        (savedJob) =>
-          savedJob.job._id === id
-      );
+    const savedJobs = response.data.savedJobs || [];
+
+    const alreadySaved = savedJobs.some(
+      (savedJob) => savedJob?.job?._id === id
+    );
 
     setSaved(alreadySaved);
 
@@ -164,27 +164,20 @@ const handleSaveJob = async () => {
        <div className="job-details-page">
 
     <div className="job-details-container">
+
+    <button
+  className="back-to-jobs-btn"
+  onClick={() => navigate("/jobs")}
+>
+  ← Back to Jobs
+</button>
       
     
       <div className="job-hero">
 
-  <div className="job-breadcrumb">
+      
 
-    <span
-      onClick={() => navigate("/jobs")}
-    >
-      Jobs
-    </span>
-
-    <span>/</span>
-
-    <span>{job.company}</span>
-
-    <span>/</span>
-
-    <strong>{job.title}</strong>
-
-  </div>
+  
 
 
   <div className="job-hero-card">
@@ -318,15 +311,27 @@ const handleSaveJob = async () => {
 
     <section className="job-section">
 
-    <h2>Responsibilities</h2>
+  <h2>Responsibilities</h2>
 
-    <ul className="job-list">
-        <li>Develop and maintain scalable web applications.</li>
-        <li>Collaborate with designers and backend developers.</li>
-        <li>Write clean, reusable and maintainable code.</li>
-        <li>Fix bugs and improve application performance.</li>
-        <li>Participate in code reviews and agile meetings.</li>
-    </ul>
+  <ul className="job-list">
+
+    {Array.isArray(job.responsibilities)
+      ? job.responsibilities.map((item, index) => (
+          <li key={index}>
+            {item}
+          </li>
+        ))
+      : job.responsibilities
+          ?.split("\n")
+          .filter(item => item.trim())
+          .map((item, index) => (
+            <li key={index}>
+              {item.trim()}
+            </li>
+          ))
+    }
+
+  </ul>
 
 </section>
 
@@ -352,47 +357,33 @@ const handleSaveJob = async () => {
 
 </section>
 
-<section className="job-section">
+<div className="benefits-list">
 
-    <h2>Employee Benefits</h2>
-
-    <div className="benefits-list">
-
-        <div className="benefit-item">
-            ✅ Health Insurance
+  {Array.isArray(job.benefits)
+    ? job.benefits.map((benefit, index) => (
+        <div
+          className="benefit-item"
+          key={index}
+        >
+          ✅ {benefit}
         </div>
+      ))
+    : job.benefits
+        ?.split(",")
+        .filter(item => item.trim())
+        .map((benefit, index) => (
+          <div
+            className="benefit-item"
+            key={index}
+          >
+            ✅ {benefit.trim()}
+          </div>
+        ))
+  }
 
-        <div className="benefit-item">
-            ✅ Flexible Working Hours
-        </div>
+</div>
 
-        <div className="benefit-item">
-            ✅ Work From Home
-        </div>
 
-        <div className="benefit-item">
-            ✅ Paid Annual Leave
-        </div>
-
-        <div className="benefit-item">
-            ✅ Performance Bonus
-        </div>
-
-        <div className="benefit-item">
-            ✅ Learning Budget
-        </div>
-
-        <div className="benefit-item">
-            ✅ Free Snacks & Coffee
-        </div>
-
-        <div className="benefit-item">
-            ✅ Team Outings
-        </div>
-
-    </div>
-
-</section>
 
 {/* ===== Application Deadline ===== */}
 
@@ -535,39 +526,48 @@ const handleSaveJob = async () => {
 
 <section className="similar-jobs">
 
-    <h2>Similar Jobs</h2>
+   {/* ===========================
+    SIMILAR JOBS
+=========================== */}
 
-    <div className="similar-jobs-grid">
+{similarJobs.length > 0 && (
+    <section className="similar-jobs-section">
 
-        {similarJobs.map((item) => (
+        <h2>Similar Jobs</h2>
 
-            <div
-                key={item._id}
-                className="similar-job-card"
-            >
+        <div className="similar-jobs-grid">
 
-                <h3>{item.title}</h3>
+            {similarJobs.map((item) => (
 
-                <p>{item.company}</p>
-
-                <span>
-                    📍 {item.location}
-                </span>
-
-                <button
-                    onClick={() =>
-                        navigate(`/jobs/${item._id}`)
-                    }
+                <div
+                    key={item._id}
+                    className="similar-job-card"
                 >
-                    View Details
-                </button>
 
-            </div>
+                    <h3>{item.title}</h3>
 
-        ))}
+                    <p>{item.company}</p>
 
-    </div>
+                    <span>
+                        📍 {item.location}
+                    </span>
 
+                    <button
+                        onClick={() =>
+                            navigate(`/jobs/${item._id}`)
+                        }
+                    >
+                        View Details
+                    </button>
+
+                </div>
+
+            ))}
+
+        </div>
+
+    </section>
+)}
 </section>
 
 </div>
