@@ -295,243 +295,181 @@ const handleSaveJob = async () => {
 </div>
 
 
-              <div className="job-details-grid">
+      <div className="job-details-grid">
 
-  <div className="job-main-content">
+    {/* ==============================
+        LEFT SIDE - MAIN CONTENT
+    ============================== */}
 
-    <section className="job-section">
+    <div className="job-main-content">
 
-      <h2>About this Job</h2>
+        {/* About this Job */}
+        <section className="job-section">
 
-      <p>
-        {job.description}
-      </p>
+            <h2>About this Job</h2>
 
-    </section>
+            <p>
+                {job.description}
+            </p>
 
-    <section className="job-section">
-
-  <h2>Responsibilities</h2>
-
-  <ul className="job-list">
-
-    {Array.isArray(job.responsibilities)
-      ? job.responsibilities.map((item, index) => (
-          <li key={index}>
-            {item}
-          </li>
-        ))
-      : job.responsibilities
-          ?.split("\n")
-          .filter(item => item.trim())
-          .map((item, index) => (
-            <li key={index}>
-              {item.trim()}
-            </li>
-          ))
-    }
-
-  </ul>
-
-</section>
-
-<section className="job-section">
-
-    <h2>Required Skills</h2>
-
-    <div className="skills-list">
-
-        {Array.isArray(job.skills)
-            ? job.skills.map((skill, index) => (
-                <span key={index} className="skill-chip">
-                    {skill}
-                </span>
-            ))
-            : job.skills?.split(",").map((skill, index) => (
-                <span key={index} className="skill-chip">
-                    {skill.trim()}
-                </span>
-            ))}
-
-    </div>
-
-</section>
-
-<div className="benefits-list">
-
-  {Array.isArray(job.benefits)
-    ? job.benefits.map((benefit, index) => (
-        <div
-          className="benefit-item"
-          key={index}
-        >
-          ✅ {benefit}
-        </div>
-      ))
-    : job.benefits
-        ?.split(",")
-        .filter(item => item.trim())
-        .map((benefit, index) => (
-          <div
-            className="benefit-item"
-            key={index}
-          >
-            ✅ {benefit.trim()}
-          </div>
-        ))
-  }
-
-</div>
+        </section>
 
 
+        {/* Responsibilities */}
+        {job.responsibilities &&
+            (Array.isArray(job.responsibilities)
+                ? job.responsibilities.length > 0
+                : job.responsibilities.trim()
+            ) && (
 
-{/* ===== Application Deadline ===== */}
+                <section className="job-section">
 
-<section className="job-section">
+                    <h2>Responsibilities</h2>
 
-  <h2>Application Deadline</h2>
+                    <ul className="job-list">
 
-  <p>
-    {job.lastDate
-      ? new Date(job.lastDate).toLocaleDateString()
-      : "Not specified"}
-  </p>
+                        {Array.isArray(job.responsibilities)
+                            ? job.responsibilities
+                                .filter(
+                                    (item) =>
+                                        item &&
+                                        item.trim()
+                                )
+                                .map((item, index) => (
 
-</section>
+                                    <li key={index}>
+                                        {item}
+                                    </li>
 
-  </div>
+                                ))
 
- <aside className="job-sidebar">
+                            : job.responsibilities
+                                .split("\n")
+                                .filter(
+                                    (item) =>
+                                        item.trim()
+                                )
+                                .map((item, index) => (
 
-  <div className="apply-card">
+                                    <li key={index}>
+                                        {item.trim()}
+                                    </li>
 
-    <h3>{job.company}</h3>
+                                ))
+                        }
 
-    <h2>{job.title}</h2>
+                    </ul>
 
-    <div className="apply-info">
+                </section>
+            )
+        }
 
-      <p>📍 {job.location}</p>
 
-      <p>💰 {job.salary}</p>
+        {/* Required Skills */}
+        {Array.isArray(job.skills) &&
+            job.skills.length > 0 && (
 
-      <p>💼 {job.experience}</p>
+                <section className="job-section">
 
-      <p>🏢 {job.jobType}</p>
+                    <h2>Required Skills</h2>
 
-      <p>🏠 {job.workMode}</p>
+                    <div className="skills-list">
 
-    </div>
+                        {job.skills
+                            .filter(
+                                (skill) =>
+                                    skill &&
+                                    skill.trim()
+                            )
+                            .map((skill, index) => (
 
-    <button
-      className="apply-button"
-      onClick={() => navigate(`/apply/${job._id}`)}
-    >
-      Apply Now
-    </button>
+                                <span
+                                    key={index}
+                                    className="skill-chip"
+                                >
+                                    {skill}
+                                </span>
 
-    <button
-  className="save-button"
-  onClick={handleSaveJob}
->
-  {saved ? "❤️ Saved" : "🤍 Save Job"}
-</button>
+                            ))
+                        }
 
-    <button
-  className="share-button"
-  onClick={handleShare}
->
-  Share Job
-</button>
+                    </div>
 
-  </div>
+                </section>
+            )
+        }
 
-  <div className="company-card">
 
-    <h3>About Company</h3>
+        {/* Employee Benefits */}
+        {Array.isArray(job.benefits) &&
+            job.benefits.filter(
+                (benefit) =>
+                    benefit &&
+                    benefit.trim()
+            ).length > 0 && (
 
-    <div className="company-card-logo">
+                <section className="job-section">
 
-        {logoUrl ? (
+                    <h2>Employee Benefits</h2>
 
-            <img
-                src={logoUrl}
-                alt={job.company}
-            />
+                    <div className="benefits-grid">
 
-        ) : (
+                        {job.benefits
+                            .filter(
+                                (benefit) =>
+                                    benefit &&
+                                    benefit.trim()
+                            )
+                            .map((benefit, index) => (
 
-            <span>
-                {job.company?.charAt(0)}
-            </span>
+                                <div
+                                    className="benefit-item"
+                                    key={index}
+                                >
+
+                                    <span>✅</span>
+
+                                    <span>
+                                        {benefit}
+                                    </span>
+
+                                </div>
+
+                            ))
+                        }
+
+                    </div>
+
+                </section>
+            )
+        }
+
+
+        {/* Application Deadline */}
+        {job.lastDate && (
+
+            <section className="job-section application-deadline-section">
+
+                <h2>Application Deadline</h2>
+
+                <p>
+                    {new Date(
+                        job.lastDate
+                    ).toLocaleDateString()}
+                </p>
+
+            </section>
 
         )}
 
-    </div>
-
-    <h4>{job.company}</h4>
-
-    <p className="company-industry">
-
-        Technology Company
-
-    </p>
-
-    <div className="company-details">
-
-        <div>
-
-            <strong>Industry</strong>
-
-            <span>Software & IT</span>
-
-        </div>
-
-        <div>
-
-            <strong>Company Size</strong>
-
-            <span>10,000+ Employees</span>
-
-        </div>
-
-        <div>
-
-            <strong>Founded</strong>
-
-            <span>1998</span>
-
-        </div>
-
-        <div>
-
-            <strong>Headquarters</strong>
-
-            <span>{job.location}</span>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-</aside>
-
-</div>
 
         {/* ===========================
-      SIMILAR JOBS
-=========================== */}
-
-<section className="similar-jobs">
-
-   {/* ===========================
     SIMILAR JOBS
 =========================== */}
 
 {similarJobs.length > 0 && (
-    <section className="similar-jobs-section">
+
+    <section className="similar-jobs">
 
         <h2>Similar Jobs</h2>
 
@@ -567,11 +505,170 @@ const handleSaveJob = async () => {
         </div>
 
     </section>
+
 )}
-</section>
+
+    </div>
+
+
+    {/* ==============================
+        RIGHT SIDE - SIDEBAR
+    ============================== */}
+
+    <aside className="job-sidebar">
+
+        {/* Apply Card */}
+        <div className="apply-card">
+
+            <h3>
+                {job.company}
+            </h3>
+
+            <h2>
+                {job.title}
+            </h2>
+
+            <div className="apply-info">
+
+                <p>
+                    📍 {job.location}
+                </p>
+
+                <p>
+                    💰 {job.salary}
+                </p>
+
+                <p>
+                    💼 {job.experience}
+                </p>
+
+                <p>
+                    🏢 {job.jobType}
+                </p>
+
+                <p>
+                    🏠 {job.workMode}
+                </p>
+
+            </div>
+
+            <button
+                className="apply-button"
+                onClick={() =>
+                    navigate(`/apply/${job._id}`)
+                }
+            >
+                Apply Now
+            </button>
+
+            <button
+                className="save-button"
+                onClick={handleSaveJob}
+            >
+                {saved
+                    ? "❤️ Saved"
+                    : "🤍 Save Job"}
+            </button>
+
+            <button
+                className="share-button"
+                onClick={handleShare}
+            >
+                Share Job
+            </button>
+
+        </div>
+
+
+        {/* About Company */}
+        <div className="company-card">
+
+            <h3>
+                About Company
+            </h3>
+
+            <div className="company-card-logo">
+
+                {logoUrl ? (
+
+                    <img
+                        src={logoUrl}
+                        alt={job.company}
+                    />
+
+                ) : (
+
+                    <span>
+                        {job.company?.charAt(0)}
+                    </span>
+
+                )}
+
+            </div>
+
+            <h4>
+                {job.company}
+            </h4>
+
+            <p className="company-industry">
+                Technology Company
+            </p>
+
+            <div className="company-details">
+
+                <div>
+                    <strong>
+                        Industry
+                    </strong>
+
+                    <span>
+                        Software & IT
+                    </span>
+                </div>
+
+
+                <div>
+                    <strong>
+                        Company Size
+                    </strong>
+
+                    <span>
+                        10,000+ Employees
+                    </span>
+                </div>
+
+
+                <div>
+                    <strong>
+                        Founded
+                    </strong>
+
+                    <span>
+                        1998
+                    </span>
+                </div>
+
+
+                <div>
+                    <strong>
+                        Headquarters
+                    </strong>
+
+                    <span>
+                        {job.location}
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
 
 </div>
-</div>
+
+        </div>
+        </div>
  </>
     )
 }
