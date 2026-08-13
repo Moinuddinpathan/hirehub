@@ -158,11 +158,17 @@
 
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
 
   font-size: 14px;
 
-  color: #4b5563;
+      color: #475569;
+  /* color: #4b5563; */
+}
+
+.job-info-icon {
+    flex-shrink: 0;
+    color: #2563eb;
 }
 
 

@@ -1,0 +1,957 @@
+/* =========================================
+   MY APPLICATIONS PAGE
+========================================= */
+
+.my-applications-page {
+    min-height: calc(100vh - 70px);
+    background: #f8fafc;
+    padding: 55px 24px 80px;
+}
+
+.my-applications-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.my-applications-header {
+    margin-bottom: 32px;
+}
+
+.my-applications-eyebrow {
+    display: block;
+    margin-bottom: 9px;
+
+    color: #2563eb;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 1.6px;
+}
+
+.my-applications-header h1 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 36px;
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+.my-applications-header p {
+    margin: 10px 0 0;
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   APPLICATION CARD
+========================================= */
+
+.my-applications-card {
+    width: 100%;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================
+   TABLE WRAPPER
+========================================= */
+
+.applications-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.my-applications-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 800px;
+}
+
+
+/* =========================================
+   TABLE HEADER
+========================================= */
+
+.my-applications-table thead {
+    background: #f8fafc;
+}
+
+.my-applications-table th {
+    padding: 17px 20px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+
+    white-space: nowrap;
+}
+
+.my-applications-table th.actions-column {
+    text-align: right;
+}
+
+
+/* =========================================
+   TABLE BODY
+========================================= */
+
+.my-applications-table td {
+    padding: 21px 20px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    color: #334155;
+
+    font-size: 14px;
+
+    vertical-align: middle;
+}
+
+.my-applications-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.my-applications-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.my-applications-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================
+   JOB
+========================================= */
+
+.application-job {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.application-job strong {
+    color: #0f172a;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   COMPANY
+========================================= */
+
+.application-company {
+    color: #475569;
+
+    font-size: 14px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.my-application-status {
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+.my-application-status::before {
+    content: "";
+
+    width: 6px;
+
+    height: 6px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* Pending */
+
+.my-application-status.pending {
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+/* Reviewed */
+
+.my-application-status.reviewed {
+    background: #dbeafe;
+
+    color: #1d4ed8;
+}
+
+
+/* Selected */
+
+.my-application-status.selected {
+    background: #dcfce7;
+
+    color: #15803d;
+}
+
+
+/* Rejected */
+
+.my-application-status.rejected {
+    background: #fee2e2;
+
+    color: #b91c1c;
+}
+
+
+/* =========================================
+   DATE
+========================================= */
+
+.application-date {
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+/* =========================================
+   ACTIONS
+========================================= */
+
+.application-actions {
+    width: 180px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.view-application-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 134px;
+
+    padding: 10px 18px;
+
+    background: #ffffff;
+
+    color: #2563eb;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    line-height: 1.2;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.view-application-button:hover {
+    background: #eff6ff;
+
+    border-color: #2563eb;
+
+    color: #1d4ed8;
+
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+
+    transform: translateY(-1px);
+}
+
+.view-application-button:active {
+    transform: translateY(0);
+
+    box-shadow: none;
+}
+
+
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.my-applications-empty {
+    padding: 80px 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+.empty-icon {
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    border-radius: 14px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+.my-applications-empty h2 {
+    margin: 0 0 8px;
+
+    color: #0f172a;
+
+    font-size: 21px;
+
+    font-weight: 600;
+}
+
+.my-applications-empty p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.my-applications-loading {
+    padding: 90px 20px;
+
+    color: #64748b;
+
+    text-align: center;
+
+    font-size: 15px;
+}
+
+.loading-spinner {
+    width: 28px;
+
+    height: 28px;
+
+    margin: 0 auto 14px;
+
+    border: 3px solid #dbeafe;
+
+    border-top-color: #2563eb;
+
+    border-radius: 50%;
+
+    animation: application-spinner 0.8s linear infinite;
+}
+
+@keyframes application-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================
+   MODAL OVERLAY
+========================================= */
+
+.application-modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(15, 23, 42, 0.55);
+
+    backdrop-filter: blur(4px);
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.application-modal {
+    width: 100%;
+
+    max-width: 650px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 25px 70px rgba(15, 23, 42, 0.25);
+
+    animation: application-modal-show 0.2s ease;
+}
+
+@keyframes application-modal-show {
+    from {
+        opacity: 0;
+
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================
+   MODAL HEADER
+========================================= */
+
+.application-modal-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    padding: 25px 28px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-eyebrow {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.4px;
+}
+
+.application-modal-header h2 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+.application-modal-header p {
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.modal-close-button {
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.modal-close-button:hover {
+    background: #e2e8f0;
+}
+
+
+/* =========================================
+   MODAL BODY
+========================================= */
+
+.application-modal-body {
+    padding: 28px;
+}
+
+.modal-status-section {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-bottom: 22px;
+
+    margin-bottom: 22px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+/* =========================================
+   DETAILS GRID
+========================================= */
+
+.application-details-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 25px;
+}
+
+.application-detail-item {
+    padding: 16px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+}
+
+.application-detail-item span {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+}
+
+.application-detail-item strong {
+    color: #0f172a;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   MODAL SECTIONS
+========================================= */
+
+.modal-section {
+    margin-top: 24px;
+}
+
+.skills-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.skill-tag {
+    padding: 6px 10px;
+
+    background: #eff6ff;
+
+    border-radius: 6px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.cover-letter {
+    padding: 15px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   MODAL FOOTER
+========================================= */
+
+.application-modal-footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 20px 28px;
+
+    border-top: 1px solid #e2e8f0;
+}
+
+.resume-button {
+    padding: 10px 17px;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: background 0.2s ease;
+}
+
+.resume-button:hover {
+    background: #1d4ed8;
+
+    color: #ffffff;
+}
+
+.modal-close-footer-button {
+    padding: 10px 17px;
+
+    border: 1px solid #dbe3ef;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.modal-close-footer-button:hover {
+    background: #f8fafc;
+}
+
+.no-resume {
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .my-applications-page {
+        padding: 40px 16px 55px;
+    }
+
+    .my-applications-header h1 {
+        font-size: 30px;
+    }
+
+    .my-applications-header p {
+        font-size: 14px;
+    }
+
+    .my-applications-card {
+        border-radius: 12px;
+    }
+
+    .my-applications-table {
+        min-width: 800px;
+    }
+
+    .my-applications-table th {
+        padding: 14px 16px;
+    }
+
+    .my-applications-table td {
+        padding: 18px 16px;
+    }
+
+    .application-modal-overlay {
+        padding: 14px;
+    }
+
+    .application-modal-header {
+        padding: 20px;
+    }
+
+    .application-modal-body {
+        padding: 20px;
+    }
+
+    .application-modal-footer {
+        padding: 16px 20px;
+    }
+
+    .application-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+/* =========================================
+   BUTTON HOVER
+========================================= */
+
+/* .view-application-button:hover {
+    background: #eff6ff;
+
+    border-color: #2563eb;
+
+    color: #1d4ed8;
+
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+
+    transform: translateY(-1px);
+} */
+
+
+/* =========================================
+   BUTTON ACTIVE
+========================================= */
+
+.view-application-button:active {
+    transform: translateY(0);
+
+    box-shadow: none;
+}
+
+/* =========================================
+   BROWSE JOBS BUTTON
+========================================= */
+
+.browse-jobs-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 26px;
+
+    padding: 13px 24px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.browse-jobs-button:hover {
+    background: #1d4ed8;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 14px rgba(37, 99, 235, 0.22);
+}
+
+/* =========================================
+BROWSE JOBS BUTTON
+========================================= */
+
+
+
+
+
+
+/* =========================================
+ACTIONS COLUMN
+========================================= */
+
+
+
+
+
+
+
+/* =========================================
+VIEW DETAILS BUTTON
+========================================= */
+
+
+
+
+.view-application-button:hover {
+
+    background: #eff6ff;
+
+    border-color: #2563eb;
+
+    color: #1d4ed8;
+
+    transform: translateY(-1px);
+
+}

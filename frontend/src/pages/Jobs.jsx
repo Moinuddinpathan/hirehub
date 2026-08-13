@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import JobCard from "../components/JobCard"
+import JobCard from "../components/JobCard";
 import { getJobs } from "../services/jobService";
-import { Link, useLocation } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import {
+    useLocation as useRouterLocation,
+    useNavigate,
+    useSearchParams
+} from "react-router-dom";
 
 function Jobs(){
 
@@ -17,6 +20,9 @@ function Jobs(){
   const [workMode, setWorkMode] = useState("");
 
  
+  const navigate = useNavigate();
+
+const routerLocation = useRouterLocation();
 
 
      // Read query parameters from URL
@@ -143,7 +149,10 @@ console.log(urlSearch);
                className="col-lg-6"
               key={job._id}
             >
-              <JobCard job={job} />
+              <JobCard
+    job={job}
+    returnPath={routerLocation.pathname + routerLocation.search}
+/>
             </div>
           ))
         ) : (

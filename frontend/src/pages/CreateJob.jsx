@@ -15,8 +15,8 @@ function CreateJob() {
     jobType: "",
     workMode: "",
     skills: "",
-     benefits: "",
-  responsibilities: "",
+    benefits: "",
+    responsibilities: "",
     description: "",
     lastDate: "",
   });
@@ -56,7 +56,7 @@ function CreateJob() {
       data.append("salary", formData.salary);
       data.append("experience", formData.experience);
 
-      
+
 
       data.append("jobType", formData.jobType);
       data.append("workMode", formData.workMode);
@@ -64,10 +64,10 @@ function CreateJob() {
 
       data.append("benefits", formData.benefits);
 
-data.append(
-  "responsibilities",
-  formData.responsibilities
-);
+      data.append(
+        "responsibilities",
+        formData.responsibilities
+      );
 
 
       data.append("description", formData.description);
@@ -78,11 +78,11 @@ data.append(
       }
 
       console.log("JOB TYPE:", formData.jobType);
-console.log("WORK MODE:", formData.workMode);
+      console.log("WORK MODE:", formData.workMode);
 
-for (const [key, value] of data.entries()) {
-  console.log(key, value);
-}
+      for (const [key, value] of data.entries()) {
+        console.log(key, value);
+      }
 
       const response = await addJob(data);
 
@@ -95,7 +95,7 @@ for (const [key, value] of data.entries()) {
 
       alert(
         error.response?.data?.message ||
-          "Failed to publish job"
+        "Failed to publish job"
       );
 
     } finally {
@@ -526,54 +526,54 @@ for (const [key, value] of data.entries()) {
 
           {/* Responsibilities */}
 
-<div className="form-group">
+          <div className="form-group">
 
-  <label htmlFor="responsibilities">
-    Responsibilities
-  </label>
+            <label htmlFor="responsibilities">
+              Responsibilities
+            </label>
 
-  <textarea
-    id="responsibilities"
-    name="responsibilities"
-    rows="6"
-    placeholder={`Example:
+            <textarea
+              id="responsibilities"
+              name="responsibilities"
+              rows="6"
+              placeholder={`Example:
 Develop and maintain web applications
 Work with frontend and backend developers
 Fix bugs and improve performance
 Participate in code reviews`}
-    value={formData.responsibilities}
-    onChange={handleChange}
-  />
+              value={formData.responsibilities}
+              onChange={handleChange}
+            />
 
-  <small className="field-help">
-    Enter one responsibility per line.
-  </small>
+            <small className="field-help">
+              Enter one responsibility per line.
+            </small>
 
-</div>
+          </div>
 
 
-{/* Benefits */}
+          {/* Benefits */}
 
-<div className="form-group">
+          <div className="form-group">
 
-  <label htmlFor="benefits">
-    Employee Benefits
-  </label>
+            <label htmlFor="benefits">
+              Employee Benefits
+            </label>
 
-  <input
-    id="benefits"
-    type="text"
-    name="benefits"
-    placeholder="e.g. Health Insurance, Work From Home, Paid Leave"
-    value={formData.benefits}
-    onChange={handleChange}
-  />
+            <input
+              id="benefits"
+              type="text"
+              name="benefits"
+              placeholder="e.g. Health Insurance, Work From Home, Paid Leave"
+              value={formData.benefits}
+              onChange={handleChange}
+            />
 
-  <small className="field-help">
-    Separate multiple benefits using commas.
-  </small>
+            <small className="field-help">
+              Separate multiple benefits using commas.
+            </small>
 
-</div>
+          </div>
 
         </section>
 

@@ -243,7 +243,7 @@
 
 }
 
-.profile-dropdown{
+/* .profile-dropdown{
 
     position:absolute;
 
@@ -263,6 +263,39 @@
 
     overflow:hidden;
 
+} */
+
+/* .profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 55px;
+    width: 220px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    padding: 8px 0;
+} */
+
+.profile-dropdown {
+    position: absolute;
+
+    right: 0;
+    top: 55px;
+
+    width: 220px;
+
+    background: #fff;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+    overflow: hidden;
+
+    padding: 8px 0;
+
+    animation: dropdown .2s ease;
 }
 
 @keyframes dropdown{
@@ -285,9 +318,8 @@
 
 }
 
-.profile-dropdown a,
-
-.profile-dropdown button{
+/* .profile-dropdown a,
+.profile-dropdown button {
 
     width:100%;
 
@@ -309,14 +341,109 @@
 
     transition:.3s;
 
+    font-size:16px;
+
+    font-weight:400;
+
+    font-family:inherit;
+
+    box-sizing:border-box;
+} */
+
+/* .profile-dropdown a,
+.profile-dropdown button {
+    width: 100%;
+    display: block;
+    padding: 13px 18px;
+    border: none;
+    background: white;
+    color: #334155;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: inherit;
+    box-sizing: border-box;
+} */
+
+.profile-dropdown a,
+.profile-dropdown button {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px 18px;
+
+    border: none;
+
+    background: #fff;
+
+    color: #334155;
+
+    text-align: left;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 400;
+
+    font-family: inherit;
+
+    box-sizing: border-box;
+
+    transition: background 0.2s ease;
 }
 
-.profile-dropdown a:hover,
+
+
+
+/* .profile-dropdown a:hover,
 
 .profile-dropdown button:hover{
 
     background:#f8fafc;
 
+} */
+
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+    background: #f1f5f9;
+}
+
+.profile-dropdown svg {
+
+    flex-shrink: 0;
+
+    color: #64748b;
+}
+
+.profile-dropdown span {
+
+    flex: 1;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 6px 0;
+}
+
+.profile-dropdown button {
+    color: #dc2626;
+}
+
+.profile-dropdown button svg {
+
+    color: #dc2626;
 }
 
 .search-btn{

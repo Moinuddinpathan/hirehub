@@ -75,30 +75,6 @@
 
 }
 
-.saved-jobs-count{
-
-    width:90px;
-
-    height:90px;
-
-    border-radius:50%;
-
-    background:#2563eb;
-
-    color:white;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:34px;
-
-    font-weight:700;
-
-}
-
 
 /*======================================
         GRID
@@ -119,73 +95,7 @@ margin-top:40px;
 }
 
 
-/*======================================
-        CARD
-======================================*/
 
-
-
-
-
-/*======================================
-        BADGE
-======================================*/
-
-
-
-
-/*======================================
-        INFO
-======================================*/
-
-
-
-/*======================================
-        BUTTON
-======================================*/
-
-.saved-view-button:hover{
-
-    background:#1d4ed8;
-
-}
-
-
-/*======================================
-        EMPTY STATE
-======================================*/
-
-.saved-empty{
-
-    background:white;
-
-    border-radius:24px;
-
-    padding:80px;
-
-    text-align:center;
-
-    box-shadow:0 15px 40px rgba(15,23,42,.08);
-
-}
-
-.saved-empty h2{
-
-    font-size:34px;
-
-    margin-bottom:15px;
-
-    color:#0f172a;
-
-}
-
-.saved-empty p{
-
-    color:#64748b;
-
-    font-size:18px;
-
-}
 
 
 /*======================================
@@ -202,15 +112,7 @@ align-items:flex-start;
 
 }
 
-.saved-jobs-count{
 
-width:70px;
-
-height:70px;
-
-font-size:26px;
-
-}
 
 .saved-jobs-header h1{
 
@@ -382,12 +284,14 @@ font-size:14px;
 
 }
 
-.saved-job-info p{
+.saved-job-info p {
+    margin: 0;
 
-    margin:0;
+    color: #475569;
 
-    color:#475569;
-
+    display: flex;
+    align-items: center;
+    gap: 9px;
 }
 
 
@@ -403,28 +307,31 @@ font-size:14px;
 
 }
 
-.saved-view-button{
+.saved-view-button {
+    flex: 1;
 
-    flex:1;
+    border: none;
 
-    border:none;
+    background: #2563eb;
 
-    background:#2563eb;
+    color: white;
 
-    color:white;
+    padding: 14px;
 
-    padding:14px;
+    border-radius: 12px;
 
-    border-radius:12px;
+    cursor: pointer;
 
-    cursor:pointer;
+    font-weight: 600;
 
-    font-weight:600;
+    transition: .3s;
 
-    transition:.3s;
+    box-shadow: 0 10px 25px rgba(37,99,235,.25);
 
-    box-shadow:0 10px 25px rgba(37,99,235,.25);
-
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .saved-view-button:hover{
@@ -433,29 +340,31 @@ font-size:14px;
 
 }
 
-.saved-remove-button{
+.saved-remove-button {
+    flex: 1;
 
-    flex:1;
+    border: 1px solid #ef4444;
 
-    border:1px solid #ef4444;
+    background: white;
 
-    background:white;
+    color: #ef4444;
 
-    color:#ef4444;
+    padding: 14px;
 
-    padding:14px;
+    border-radius: 12px;
 
-    border-radius:12px;
+    cursor: pointer;
 
-    cursor:pointer;
+    font-weight: 600;
 
-    font-weight:600;
+    transition: .3s;
 
-    transition:.3s;
+    box-shadow: 0 8px 18px rgba(239,68,68,.10);
 
-    box-shadow:0 8px 18px rgba(239,68,68,.10);
-
-
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .saved-remove-button:hover{
@@ -549,4 +458,112 @@ font-size:13px;
 
 width:max-content;
 
+}
+
+/* =========================================
+   EMPTY SAVED JOBS
+========================================= */
+
+.saved-empty {
+    width: 100%;
+    min-height: 360px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 35px;
+    padding: 60px 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.06);
+
+    text-align: center;
+}
+
+.saved-empty-icon {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    border-radius: 14px;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.saved-empty h2 {
+    margin: 0 0 8px;
+
+    color: #0f172a;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.saved-empty p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.browse-saved-jobs-button {
+    margin-top: 24px;
+
+    padding: 12px 22px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.browse-saved-jobs-button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 14px rgba(37, 99, 235, 0.22);
+}
+
+/* =========================================
+   LUCIDE ICON STYLING
+========================================= */
+
+.saved-job-info svg {
+    flex-shrink: 0;
+    color: #2563eb;
+}
+
+.saved-view-button svg,
+.saved-remove-button svg {
+    flex-shrink: 0;
 }

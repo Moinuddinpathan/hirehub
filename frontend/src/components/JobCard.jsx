@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
+import {
+  MapPin,
+  IndianRupee
+} from "lucide-react";
 import "./JobCard.css";
 
-function JobCard({ job }) {
+function JobCard({ job, returnPath }) {
 
   const logoUrl = job.logo
     ? `http://localhost:5000/${job.logo.replace(/\\/g, "/")}`
@@ -57,17 +61,27 @@ function JobCard({ job }) {
       {/* Job Information */}
       <div className="job-info">
 
-        <div className="job-info-item">
-          <span>📍</span>
-          <span>{job.location}</span>
-        </div>
+  <div className="job-info-item">
+    <MapPin
+      size={17}
+      strokeWidth={2}
+      className="job-info-icon"
+    />
 
-        <div className="job-info-item">
-          <span>💰</span>
-          <span>{job.salary}</span>
-        </div>
+    <span>{job.location}</span>
+  </div>
 
-      </div>
+  <div className="job-info-item">
+    <IndianRupee
+      size={17}
+      strokeWidth={2}
+      className="job-info-icon"
+    />
+
+    <span>{job.salary}</span>
+  </div>
+
+</div>
 
 
       {/* Job Tags */}
@@ -90,11 +104,14 @@ function JobCard({ job }) {
 
       {/* View Details Button */}
       <Link
-        to={`/jobs/${job._id}`}
-        className="view-job-btn"
-      >
-        View Details
-      </Link>
+    to={`/jobs/${job._id}`}
+    state={{
+        from: returnPath
+    }}
+    className="view-job-btn"
+>
+    View Details
+</Link>
 
     </div>
   );

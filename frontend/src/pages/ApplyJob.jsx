@@ -5,10 +5,12 @@ import { useEffect } from "react";
 import "../styles/ApplyJob.css";
 import { getJobById } from "../services/jobService";
 
-function ApplyJob(){
+function ApplyJob() {
+
+    const navigate = useNavigate();
+
 
     const { id } = useParams();
-    const navigate = useNavigate();
 
     const [job, setJob] = useState(null);
 
@@ -24,7 +26,7 @@ function ApplyJob(){
 
 
 
-const [resume, setResume] = useState(null);
+    const [resume, setResume] = useState(null);
 
     const [loading, setLoading] = useState(true);
 
@@ -62,7 +64,7 @@ const [resume, setResume] = useState(null);
 
 
 
-     // ==============================
+    // ==============================
     // HANDLE INPUT
     // ==============================
 
@@ -78,27 +80,27 @@ const [resume, setResume] = useState(null);
     };
 
 
-       // ==============================
+    // ==============================
     // HANDLE RESUME
     // ==============================
 
-const handleResumeChange = (e) => {
-    const file = e.target.files[0];
+    const handleResumeChange = (e) => {
+        const file = e.target.files[0];
 
-    if (file) {
-        if (file.type !== "application/pdf") {
-            alert("Please upload a PDF resume.");
-            e.target.value = "";
-            return;
+        if (file) {
+            if (file.type !== "application/pdf") {
+                alert("Please upload a PDF resume.");
+                e.target.value = "";
+                return;
+            }
+
+            setResume(file);
         }
-
-        setResume(file);
-    }
-};
+    };
 
 
 
-// ==============================
+    // ==============================
     // SUBMIT APPLICATION
     // ==============================
 
@@ -118,24 +120,28 @@ const handleResumeChange = (e) => {
 
             setSubmitting(true);
 
-           const data = new FormData();
+            const data = new FormData();
 
-data.append("job", id);
-data.append("resume", resume);
+            data.append("job", id);
+            data.append("resume", resume);
 
-data.append("skills", formData.skills);
-data.append("experience", formData.experience);
-data.append("location", formData.currentLocation);
-data.append("expectedSalary", formData.expectedSalary);
-data.append("linkedIn", formData.linkedin);
-data.append("github", formData.github);
-data.append("coverLetter", formData.coverLetter);
+            data.append("skills", formData.skills);
+            data.append("experience", formData.experience);
+            data.append("location", formData.currentLocation);
+            data.append("expectedSalary", formData.expectedSalary);
+            data.append("linkedIn", formData.linkedin);
+            data.append("github", formData.github);
+            data.append("coverLetter", formData.coverLetter);
 
-await applyJob(data);
+           const response = await applyJob(data);
 
-            alert("Application submitted successfully!");
+alert("Application submitted successfully!");
 
-            navigate("/applications");
+navigate("/applications", {
+    state: {
+        applicationSubmitted: true
+    }
+});
 
 
         } catch (error) {
@@ -160,7 +166,7 @@ await applyJob(data);
 
 
 
-    
+
     // ==============================
     // LOADING
     // ==============================
@@ -188,7 +194,7 @@ await applyJob(data);
 
     return (
 
-     <div className="apply-job-page">
+        <div className="apply-job-page">
 
             <div className="apply-job-container">
 
@@ -502,7 +508,7 @@ await applyJob(data);
 
 }
 
-  
+
 
 
 

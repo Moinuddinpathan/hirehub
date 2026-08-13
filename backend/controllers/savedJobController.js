@@ -47,9 +47,14 @@ const getSavedJobs = async (req, res) => {
       user: req.user._id,
     }).populate("job");
 
+    // Remove saved-job records where the job no longer exists
+    const validSavedJobs = savedJobs.filter(
+      (item) => item.job
+    );
+
     res.json({
       success: true,
-      savedJobs,
+      savedJobs: validSavedJobs,
     });
 
   } catch (error) {

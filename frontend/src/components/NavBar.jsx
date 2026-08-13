@@ -1,7 +1,13 @@
   import { Link } from "react-router-dom";
   import { useAuth } from "../context/AuthContext";
   import { NavLink, useNavigate } from "react-router-dom";
-  import { useState } from "react";
+  import { useState, useEffect } from "react";
+  import {
+    User,
+    Bookmark,
+    FileText,
+    LogOut
+} from "lucide-react";
   import "./Navbar.css";  
   import logo from "../assets/llogo.png";
 
@@ -15,11 +21,30 @@
 
 const navigate = useNavigate();
 
+const [dropdownOpen, setDropdownOpen] = useState(false);
+
+useEffect(() => {
+
+    const handleClickOutside = (e) => {
+
+        if (!e.target.closest(".profile-menu")) {
+            setDropdownOpen(false);
+        }
+
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+        document.removeEventListener("click", handleClickOutside);
+    };
+
+}, []);
 
 const [search, setSearch] = useState("");
 
 
-    const [showMenu, setShowMenu] = useState(false);
+    // const [showMenu, setShowMenu] = useState(false);
     // const search = params.get("search");
    
    
@@ -36,6 +61,10 @@ const handleSearch = () => {
 
 };
   
+
+const closeDropdown = () => {
+    setDropdownOpen(false);
+};
 
   // navigate(`/jobs?search=${search}`);
 
@@ -145,7 +174,7 @@ const handleSearch = () => {
 
     <button
         className="profile-button"
-        onClick={() => setShowMenu(!showMenu)}
+        onClick={() => setDropdownOpen(!dropdownOpen)}
     >
 
         <div className="avatar">
@@ -164,39 +193,76 @@ const handleSearch = () => {
 
     </button>
 
-    {showMenu && (
+    {/* {dropdownOpen && (
 
         <div className="profile-dropdown">
 
-            <Link to="/profile">
+    <Link to="/profile" onClick={closeDropdown}>
+        👤 My Profile
+    </Link>
 
-                My Profile
+    <Link to="/saved-jobs" onClick={closeDropdown}>
+        🔖 Saved Jobs
+    </Link>
 
-            </Link>
+    <Link to="/my-applications" onClick={closeDropdown}>
+        📄 Applications
+    </Link>
 
-            <Link to="/saved-jobs">
+    <div className="dropdown-divider"></div>
 
-                Saved Jobs
+    <button
+        onClick={() => {
+            closeDropdown();
+            logout();
+            navigate("/");
+        }}
+    >
+        ↪ Logout
+    </button>
 
-            </Link>
 
-            <Link to="/my-applications">
 
-                Applications
+</div>
 
-            </Link>
+    )} */}
 
-           <button
-    onClick={logout}
->
+    {dropdownOpen && (
 
-Logout
+    <div className="profile-dropdown">
 
-</button>
+        <Link to="/profile" onClick={closeDropdown}>
+            <User size={18} />
+            <span>My Profile</span>
+        </Link>
 
-        </div>
+        <Link to="/saved-jobs" onClick={closeDropdown}>
+            <Bookmark size={18} />
+            <span>Saved Jobs</span>
+        </Link>
 
-    )}
+        <Link to="/my-applications" onClick={closeDropdown}>
+            <FileText size={18} />
+            <span>Applications</span>
+        </Link>
+
+        <div className="dropdown-divider"></div>
+
+        <button
+            onClick={() => {
+                closeDropdown();
+                logout();
+                navigate("/");
+            }}
+        >
+            <LogOut size={18} />
+            <span>Logout</span>
+        </button>
+
+    </div>
+
+)}
+    
 
 </div>
 

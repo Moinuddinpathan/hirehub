@@ -1,7 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSavedJobs } from "../services/savedJobService";
+import {
+    getSavedJobs,
+    removeSavedJob
+} from "../services/savedJobService";
 import "../styles/SavedJobs.css";
+import {
+    MapPin,
+    IndianRupee,
+    BriefcaseBusiness,
+    Clock3,
+    House,
+    Heart,
+    Eye,
+    Trash2
+} from "lucide-react";
 
 function SavedJobs() {
 
@@ -15,19 +28,51 @@ function SavedJobs() {
 
     const fetchSavedJobs = async () => {
 
-        try {
+    try {
 
-            const response = await getSavedJobs();
+        const response = await getSavedJobs();
 
-            setSavedJobs(response.data.savedJobs);
+        const jobs = response.data.savedJobs || [];
 
-        } catch (error) {
+        // Remove saved-job records whose job no longer exists
+        const validSavedJobs = jobs.filter(
+            (item) => item.job
+        );
 
-            console.log(error);
+        setSavedJobs(validSavedJobs);
 
-        }
+    } catch (error) {
 
-    };
+        console.log("Get saved jobs error:", error);
+
+        setSavedJobs([]);
+
+    }
+
+};
+
+    const handleRemove = async (jobId) => {
+
+    try {
+
+        await removeSavedJob(jobId);
+
+        setSavedJobs((prev) =>
+            prev.filter((item) => item.job?._id !== jobId)
+        );
+
+    } catch (error) {
+
+        console.log("Remove saved job error:", error);
+
+        alert(
+            error.response?.data?.message ||
+            "Failed to remove saved job."
+        );
+
+    }
+
+};
 
     const getPostedTime = (date) => {
 
@@ -71,160 +116,222 @@ function SavedJobs() {
     return (
 
 
-<div className="saved-jobs-page">
+ <div className="saved-jobs-page">
 
-<div className="saved-jobs-container">
+            <div className="saved-jobs-container">
 
-<div className="saved-header">
+                {/* ===============================
+                    HEADER
+                =============================== */}
 
-    {/* <h1>My Saved Jobs</h1> */}
+                <div className="saved-jobs-header">
 
-    <span className="saved-jobs-eyebrow">
+                    <div>
 
-CAREER DASHBOARD
+                        <span className="saved-jobs-eyebrow">
+                            CAREER DASHBOARD
+                        </span>
 
-</span>
+                        <h1>
+                            My Saved Jobs
+                        </h1>
 
-<h1>
+                        <p>
+                            Manage all your bookmarked opportunities in one place.
+                        </p>
 
-My Saved Jobs
+                    </div>
 
-</h1>
+                </div>
 
-<p>
 
-Manage all your bookmarked opportunities in one place.
+                {/* ===============================
+                    EMPTY STATE
+                =============================== */}
 
-</p>
-</div>
+                {savedJobs.length === 0 ? (
 
-{savedJobs.length === 0 ? (
+                    <div className="saved-empty">
 
-<div className="saved-empty">
+                        <div className="saved-empty-icon">
+                            ♡
+                        </div>
 
-<h2>No Saved Jobs</h2>
+                        <h2>
+                            No Saved Jobs
+                        </h2>
 
-<p>
+                        <p>
+                            You haven't saved any jobs yet.
+                        </p>
 
-You haven't saved any jobs yet.
+                        <button
+                            className="browse-saved-jobs-button"
+                            onClick={() => navigate("/jobs")}
+                        >
+                            Browse Jobs
+                        </button>
 
-</p>
-
-</div>
-
-) : (
-
-<div className="saved-jobs-grid">
-
-{savedJobs.map((item) => (
-
-<div
-    className="saved-job-card"
-    key={item._id}
->
-
-    <div className="saved-card-header">
-
-        <div className="saved-company">
-
-            <div className="saved-logo">
-
-                {item.job.logo ? (
-
-                    <img
-                        src={`http://localhost:5000/${item.job.logo.replace(/\\/g, "/")}`}
-                        alt={item.job.company}
-                    />
+                    </div>
 
                 ) : (
 
-                    <span>
-                        {item.job.company.charAt(0)}
-                    </span>
+                    /* ===============================
+                       SAVED JOBS GRID
+                    =============================== */
+
+                    <div className="saved-jobs-grid">
+
+                        {savedJobs.map((item) => {
+
+                           
+                            return (
+
+                                <div
+                                    className="saved-job-card"
+                                    key={item._id}
+                                >
+
+                                    {/* ===============================
+                                        CARD HEADER
+                                    =============================== */}
+
+                                    <div className="saved-card-header">
+
+                                        <div className="saved-company">
+
+                                            <div className="saved-logo">
+
+                                                {item.job.logo ? (
+
+                                                    <img
+                                                        src={`http://localhost:5000/${item.job.logo.replace(
+                                                            /\\/g,
+                                                            "/"
+                                                        )}`}
+                                                        alt={item.job.company}
+                                                    />
+
+                                                ) : (
+
+                                                    <span>
+                                                        {item.job.company?.charAt(0)}
+                                                    </span>
+
+                                                )}
+
+                                            </div>
+
+                                            <div>
+
+                                                <h3>
+                                                    {item.job.title}
+                                                </h3>
+
+                                                <p className="saved-company-name">
+                                                    {item.job.company}
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <span className="saved-job-badge">
+                                            Saved
+                                        </span>
+
+                                    </div>
+
+
+                                    {/* ===============================
+                                        JOB INFORMATION
+                                    =============================== */}
+
+                                    <div className="saved-job-info">
+
+    <p>
+        <MapPin size={17} strokeWidth={2} />
+        {item.job.location}
+    </p>
+
+    <p>
+        <IndianRupee size={17} strokeWidth={2} />
+        {item.job.salary}
+    </p>
+
+    <p>
+        <BriefcaseBusiness size={17} strokeWidth={2} />
+        {item.job.experience}
+    </p>
+
+    <p>
+        <Clock3 size={17} strokeWidth={2} />
+        {getPostedTime(item.job.createdAt)}
+    </p>
+
+    <span className="job-type-pill">
+        {item.job.jobType}
+    </span>
+
+    <p>
+        <House size={17} strokeWidth={2} />
+        {item.job.workMode}
+    </p>
+
+</div>
+
+
+                                    {/* ===============================
+                                        ACTIONS
+                                    =============================== */}
+
+                                    <div className="saved-job-actions">
+
+                                        <button
+    className="saved-view-button"
+    onClick={() =>
+        navigate(
+            `/jobs/${item.job._id}`,
+            {
+                state: {
+                    from: "/saved-jobs"
+                }
+            }
+        )
+    }
+>
+    <Eye size={17} strokeWidth={2} />
+    View Details
+</button>
+
+                                        <button
+    className="saved-remove-button"
+    onClick={() =>
+        handleRemove(item.job._id)
+    }
+>
+    <Trash2 size={17} strokeWidth={2} />
+    Remove
+</button>
+
+                                    </div>
+
+                                </div>
+
+                            );
+
+                        })}
+
+                    </div>
 
                 )}
 
             </div>
 
-           <div>
-
-<h3>{item.job.title}</h3>
-
-<p className="saved-company-name">
-
-{item.job.company}
-
-</p>
-</div>  
-
         </div>
 
-        <span className="saved-job-badge">
-
-            Saved
-
-        </span>
-
-    </div>
-
-
-    <div className="saved-job-info">
-
-        <p>📍 {item.job.location}</p>
-
-        <p>💰 {item.job.salary}</p>
-
-        <p>💼 {item.job.experience}</p>
-
-        <p>🕒 {getPostedTime(item.job.createdAt)} </p>
-
-        <span className="job-type-pill">
-
-{item.job.jobType}
-
-</span>
-
-        <p>🏠 {item.job.workMode}</p>
-
-       
-
-    </div>
-
-
-    <div className="saved-job-actions">
-
-        <button
-            className="saved-view-button"
-            onClick={() =>
-                navigate(`/jobs/${item.job._id}`)
-            }
-        >
-            View Details
-        </button>
-
-        <button
-            className="saved-remove-button"
-        >
-            Remove
-        </button>
-
-    </div>
-
-</div>
-
-))}
-
-</div>
-
-)}
-
-</div>
-
-</div>
-
-);
-
-
+    );
 }
 
 export default SavedJobs;
