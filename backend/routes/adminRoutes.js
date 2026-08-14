@@ -10,6 +10,7 @@ const {
   updateJobStatus,
   deleteUser,
   deleteJob,
+  getWebsiteStats,
   
 } = require("../controllers/adminController");
 
@@ -26,6 +27,13 @@ router.get(
   authMiddleware,
   adminMiddleware,
   getDashboard
+);
+
+router.get(
+    "/stats",
+    authMiddleware,
+    adminMiddleware,
+    getWebsiteStats
 );
 
 // Users

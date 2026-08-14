@@ -26,6 +26,7 @@
   import AdminLayout from "./components/AdminLayout";
 
   import EditJob from "./pages/EditJob";
+  import ForgotPassword from "./pages/ForgetPassword";
 
 
 
@@ -76,6 +77,11 @@
           path="/jobs"
           element={<Jobs />}
         />
+
+         <Route
+        path="/forgot-password"
+        element={<ForgotPassword />}
+      />
 
         <Route
           path="/jobs/:id"

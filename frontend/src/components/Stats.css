@@ -46,3 +46,191 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================
+   STATS SECTION
+========================================= */
+
+.stats-section {
+
+    width: 100%;
+
+    background: #ffffff;
+
+    padding: 55px 20px;
+
+}
+
+
+.stats-container {
+
+    max-width: 1300px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 30px;
+
+}
+
+
+/* =========================================
+   STAT CARD
+========================================= */
+
+.stat-card {
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    padding: 40px 25px;
+
+    text-align: center;
+
+    border: 1px solid #f1f5f9;
+
+    box-shadow:
+        0 12px 30px
+        rgba(15, 23, 42, 0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+.stat-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 18px 40px
+        rgba(15, 23, 42, 0.12);
+
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.stat-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+}
+
+
+.stat-icon svg {
+
+    flex-shrink: 0;
+
+}
+
+
+/* =========================================
+   NUMBER
+========================================= */
+
+.stat-card h2 {
+
+    margin: 0;
+
+    color: #2563eb;
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+}
+
+
+/* =========================================
+   LABEL
+========================================= */
+
+.stat-card p {
+
+    margin: 12px 0 0;
+
+    color: #334155;
+
+    font-size: 17px;
+
+    font-weight: 500;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .stats-container {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .stats-section {
+
+        padding: 40px 15px;
+
+    }
+
+
+    .stats-container {
+
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+    }
+
+
+    .stat-card {
+
+        padding: 30px 20px;
+
+    }
+
+
+    .stat-card h2 {
+
+        font-size: 36px;
+
+    }
+
+}

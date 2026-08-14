@@ -80,6 +80,52 @@ const getDashboard = async (req, res) => {
   }
 };
 
+const getWebsiteStats = async (req, res) => {
+    try {
+
+        const jobsAvailable = await Job.countDocuments();
+
+        const companies = await Job.distinct("company");
+
+        const candidates = await User.countDocuments({
+            role: "user"
+        });
+
+        const totalApplications = await Application.countDocuments();
+
+        const successfulApplications = await Application.countDocuments({
+            status: "accepted"
+        });
+
+        const successRate =
+            totalApplications > 0
+                ? Math.round(
+                    (successfulApplications / totalApplications) * 100
+                )
+                : 0;
+
+        res.status(200).json({
+            success: true,
+            stats: {
+                jobsAvailable,
+                companies: companies.length,
+                candidates,
+                successRate
+            }
+        });
+
+    } catch (error) {
+
+        console.log("Get website stats error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch website statistics"
+        });
+
+    }
+};
+
 
 // Get All Users
 const getUsers = async (req, res) => {
@@ -384,4 +430,5 @@ module.exports = {
   updateJobStatus,
   deleteJob,
   deleteUser,
+  getWebsiteStats,
 };

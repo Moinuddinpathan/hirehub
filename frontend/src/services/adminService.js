@@ -6,6 +6,8 @@ export const getDashboard = () => {
     return api.get("/admin/dashboard")
 }
 
+
+
 // Get All Users
 export const getUsers = () => {
   return api.get("/admin/users");

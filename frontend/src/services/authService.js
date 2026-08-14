@@ -16,6 +16,23 @@ export const registerUser = (userData) => {
   return api.post("/auth/register", userData);
 };
 
+// Verify Reset OTP
+export const verifyResetOtp = (data) => {
+  return api.post("/auth/verify-reset-otp", data);
+};
+
+
+// Reset Password
+export const resetPassword = (data) => {
+  return api.post("/auth/reset-password", data);
+};
+
+export const forgotPassword = (email) => {
+  return api.post("/auth/forgot-password", {
+    email,
+  });
+};
+
 export const loginUser = (userData) => {
   return api.post("/auth/login", userData);
 };

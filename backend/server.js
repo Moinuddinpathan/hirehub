@@ -21,6 +21,7 @@ const savedJobRoutes = require("./routes/savedJobRoutes")
 const userRoutes = require("./routes/userRoutes");
 
 const adminRoutes = require("./routes/adminRoutes");
+const statsRoutes = require("./routes/statsRoutes")
 
 // dotenv.config();
 
@@ -60,6 +61,8 @@ app.use("/api/saved-jobs", savedJobRoutes);
 
 
 app.use("/api/users", userRoutes);
+
+app.use("/api/stats", statsRoutes);
 
 
 // Test Route
