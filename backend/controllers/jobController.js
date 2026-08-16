@@ -69,73 +69,150 @@ workMode,
 };
 
 const getJobs = async (req, res) => {
+  try {
+    const {
+      keyword = "",
+      location = "",
+      jobType = "",
+      workMode = "",
+    } = req.query;
 
-  console.log("Search Query:", req.query.search);
+    console.log("=================================");
+    console.log("JOB SEARCH");
+    console.log("Keyword:", keyword);
+    console.log("Location:", location);
+    console.log("Job Type:", jobType);
+    console.log("Work Mode:", workMode);
+    console.log("=================================");
 
-    try {
+    const query = {};
 
-        const { search } = req.query;
+    // ==========================================
+    // 1. KEYWORD SEARCH
+    // ==========================================
+    //
+    // Search inside:
+    // - title
+    // - company
+    // - skills
+    // - description
+    //
+    if (keyword.trim()) {
+      const searchText = keyword.trim();
 
-        let query = {};
-
-        if (search) {
-
-            query = {
-
-                $or: [
-
-                    {
-                        title: {
-                            $regex: search,
-                            $options: "i",
-                        },
-                    },
-
-                    {
-                        company: {
-                            $regex: search,
-                            $options: "i",
-                        },
-                    },
-
-                    {
-                        location: {
-                            $regex: search,
-                            $options: "i",
-                        },
-                    },
-
-                ],
-
-            };
-
-        }
-
-        const jobs = await Job.find(query);
-
-        res.status(200).json({
-
-            success: true,
-
-            jobs,
-
-        });
-
-    } catch (error) {
-
-        res.status(500).json({
-
-            success: false,
-
-            message: error.message,
-
-        });
-
+      query.$or = [
+        {
+          title: {
+            $regex: searchText,
+            $options: "i",
+          },
+        },
+        {
+          company: {
+            $regex: searchText,
+            $options: "i",
+          },
+        },
+        {
+          skills: {
+            $regex: searchText,
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: searchText,
+            $options: "i",
+          },
+        },
+      ];
     }
 
+    // ==========================================
+    // 2. LOCATION SEARCH
+    // ==========================================
+    //
+    // Supports:
+    // Mumbai
+    // Mumbai, Hyderabad
+    // Mumbai Hyderabad
+    //
+    if (location.trim()) {
+      const locations = location
+        .split(/[,&]+|\s+and\s+/i)
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      if (locations.length === 1) {
+        query.location = {
+          $regex: locations[0],
+          $options: "i",
+        };
+      } else {
+        query.$and = query.$and || [];
+
+        query.$and.push({
+          $or: locations.map((city) => ({
+            location: {
+              $regex: city,
+              $options: "i",
+            },
+          })),
+        });
+      }
+    }
+
+    // ==========================================
+    // 3. JOB TYPE
+    // ==========================================
+    //
+    // Empty = ALL job types
+    //
+    if (jobType.trim()) {
+      query.jobType = {
+        $regex: `^${jobType.trim()}$`,
+        $options: "i",
+      };
+    }
+
+    // ==========================================
+    // 4. WORK MODE
+    // ==========================================
+    //
+    // Empty = ALL work modes
+    //
+    if (workMode.trim()) {
+      query.workMode = {
+        $regex: `^${workMode.trim()}$`,
+        $options: "i",
+      };
+    }
+
+    console.log(
+      "MongoDB Query:",
+      JSON.stringify(query, null, 2)
+    );
+
+    const jobs = await Job.find(query)
+      .sort({ createdAt: -1 });
+
+    console.log("Jobs Found:", jobs.length);
+
+    res.status(200).json({
+      success: true,
+      count: jobs.length,
+      jobs,
+    });
+
+  } catch (error) {
+    console.error("GET JOBS ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
-
-
 
 const getJobById = async (req, res)=>{
 

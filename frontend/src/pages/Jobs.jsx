@@ -1,174 +1,220 @@
 import { useEffect, useState } from "react";
 import JobCard from "../components/JobCard";
 import { getJobs } from "../services/jobService";
+
 import {
-    useLocation as useRouterLocation,
-    useNavigate,
-    useSearchParams
+  useLocation as useRouterLocation,
+  useSearchParams,
 } from "react-router-dom";
 
-function Jobs(){
+function Jobs() {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const routerLocation = useRouterLocation();
 
-    const [jobs, setJobs]= useState([])
-    const [loading, setLoading] = useState(true);
-
-     // Search and filter states
-  // const [search, setSearch] = useState("");
-  const [location, setLocation] = useState("");
-  const [jobType, setJobType] = useState("");
-  const [workMode, setWorkMode] = useState("");
-
- 
-  const navigate = useNavigate();
-
-const routerLocation = useRouterLocation();
-
-
-     // Read query parameters from URL
   const [searchParams] = useSearchParams();
 
-const company = searchParams.get("company");
+  // ==========================================
+  // READ URL FILTERS
+  // ==========================================
 
-const urlSearch = searchParams.get("search") || "";
+  const keyword =
+    searchParams.get("keyword") || "";
 
-console.log(urlSearch);
+  const location =
+    searchParams.get("location") || "";
 
+  const jobType =
+    searchParams.get("jobType") || "";
 
+  const workMode =
+    searchParams.get("workMode") || "";
 
-    useEffect(()=>{
-        fetchJobs();
-    }, [urlSearch]);
+  const company =
+    searchParams.get("company") || "";
 
-    const fetchJobs = async () => {
+  // ==========================================
+  // FETCH JOBS
+  // ==========================================
+
+  useEffect(() => {
+    fetchJobs();
+  }, [
+    keyword,
+    location,
+    jobType,
+    workMode,
+  ]);
+
+  const fetchJobs = async () => {
     try {
+      setLoading(true);
 
-        const response = await getJobs(urlSearch);
+      const response = await getJobs({
+        keyword,
+        location,
+        jobType,
+        workMode,
+      });
 
-        setJobs(response.data.jobs);
+      setJobs(
+        response.data.jobs || []
+      );
+
     } catch (error) {
-        console.log("Error fetching jobs:", error);
+      console.error(
+        "Error fetching jobs:",
+        error
+      );
+
+      setJobs([]);
+
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
- // Filter jobs
+  // ==========================================
+  // COMPANY FILTER
+  // ==========================================
+
   const filteredJobs = jobs.filter((job) => {
-    // ---------------------------
-    // Company filter
-    // ---------------------------
-    const matchesCompany =
-      !company ||
-      job.company?.toLowerCase() === company.toLowerCase();
-
-    // ---------------------------
-    // Search filter
-    // Search title, company, skills
-    // ---------------------------
-    const searchText = urlSearch.toLowerCase().trim();
-
-    const skillsText = Array.isArray(job.skills)
-      ? job.skills.join(" ").toLowerCase()
-      : String(job.skills || "").toLowerCase();
-
-    const matchesSearch =
-      !searchText ||
-      job.title?.toLowerCase().includes(searchText) ||
-      job.company?.toLowerCase().includes(searchText) ||
-      skillsText.includes(searchText);
-
-    // ---------------------------
-    // Location filter
-    // ---------------------------
-    const matchesLocation =
-      !location.trim() ||
-      job.location
-        ?.toLowerCase()
-        .includes(location.toLowerCase().trim());
-
-    // ---------------------------
-    // Job type filter
-    // ---------------------------
-    const matchesJobType =
-      !jobType || job.jobType === jobType;
-
-    // ---------------------------
-    // Work mode filter
-    // ---------------------------
-    const matchesWorkMode =
-      !workMode || job.workMode === workMode;
+    if (!company) {
+      return true;
+    }
 
     return (
-      matchesCompany &&
-      matchesSearch &&
-      matchesLocation &&
-      matchesJobType &&
-      matchesWorkMode
+      job.company
+        ?.toLowerCase()
+        .includes(
+          company.toLowerCase()
+        )
     );
   });
 
-  const clearFilters = () => {
-    // setSearch("");
-    setLocation("");
-    setJobType("");
-    setWorkMode("");
-  };
+  // ==========================================
+  // LOADING
+  // ==========================================
 
   if (loading) {
     return (
       <div className="container mt-5">
         <h3 className="text-center">
-          Loading Jobs...
+          Finding the best jobs for you...
         </h3>
       </div>
     );
   }
 
+  // ==========================================
+  // PAGE
+  // ==========================================
 
-    
-    return(
-     <div className="container mt-5">
+  return (
+    <div className="container mt-5">
 
       <h2 className="text-center mb-2">
-        {company ? `${company} Jobs` : "Available Jobs"}
+        {company
+          ? `${company} Jobs`
+          : "Available Jobs"}
       </h2>
 
-      {company && (
+      {/* SEARCH SUMMARY */}
+
+      {(keyword ||
+        location ||
+        jobType ||
+        workMode) && (
         <p className="text-center text-muted mb-4">
+
           {filteredJobs.length}{" "}
-          {filteredJobs.length === 1 ? "job" : "jobs"} available
+          {filteredJobs.length === 1
+            ? "job"
+            : "jobs"}{" "}
+          found
+
+          {keyword && (
+            <>
+              {" "}for{" "}
+              <strong>
+                {keyword}
+              </strong>
+            </>
+          )}
+
+          {location && (
+            <>
+              {" "}in{" "}
+              <strong>
+                {location}
+              </strong>
+            </>
+          )}
+
+          {jobType && (
+            <>
+              {" "}·{" "}
+              <strong>
+                {jobType}
+              </strong>
+            </>
+          )}
+
+          {workMode && (
+            <>
+              {" "}·{" "}
+              <strong>
+                {workMode}
+              </strong>
+            </>
+          )}
+
         </p>
       )}
+
+      {/* JOB CARDS */}
 
       <div className="row g-4">
 
         {filteredJobs.length > 0 ? (
+
           filteredJobs.map((job) => (
             <div
-               className="col-lg-6"
+              className="col-lg-6"
               key={job._id}
             >
               <JobCard
-    job={job}
-    returnPath={routerLocation.pathname + routerLocation.search}
-/>
+                job={job}
+                returnPath={
+                  routerLocation.pathname +
+                  routerLocation.search
+                }
+              />
             </div>
           ))
+
         ) : (
-          <div className="text-center">
+
+          <div className="col-12 text-center py-5">
+
             <h4>
-              {company
-                ? `No jobs available at ${company}`
-                : "No Jobs Available"}
+              No Jobs Found
             </h4>
+
+            <p className="text-muted">
+              Try a different keyword,
+              location or filter.
+            </p>
+
           </div>
+
         )}
 
       </div>
 
     </div>
-    );
+  );
 }
 
-export default Jobs
+export default Jobs;

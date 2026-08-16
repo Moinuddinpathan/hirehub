@@ -3,18 +3,20 @@ import api from "./api"
 
 
 
-export const getJobs = (search = "") => {
-
-    return api.get("/jobs", {
-
-        params: {
-
-            search,
-
-        },
-
-    });
-
+export const getJobs = ({
+  keyword = "",
+  location = "",
+  jobType = "",
+  workMode = "",
+} = {}) => {
+  return api.get("/jobs", {
+    params: {
+      keyword,
+      location,
+      jobType,
+      workMode,
+    },
+  });
 };
 
 export const updateJobStatus = async (id, status) => {
