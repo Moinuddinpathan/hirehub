@@ -1,6 +1,6 @@
 const express = require("express");
 
-
+const uploadResume = require("../middleware/uploadResume");
 
 const {
   registerUser,
@@ -10,6 +10,7 @@ const {
   logoutUser,
   refreshAccessToken,
   getProfile,  
+  uploadResumeController,
   forgotPassword,
   verifyResetOtp,
   resetPassword,
@@ -81,6 +82,13 @@ router.post("/logout", logoutUser);
 router.post("/refresh-token", refreshAccessToken);
 
 router.get("/profile", authMiddleware, getProfile);
+
+router.post(
+  "/resume",
+  authMiddleware,
+  uploadResume.single("resume"),
+  uploadResumeController
+);
 
 
 

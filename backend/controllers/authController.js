@@ -193,6 +193,65 @@ const getProfile = async (req, res) => {
 };
 
 // =====================================================
+// UPLOAD RESUME
+// =====================================================
+
+const uploadResumeController = async (req, res) => {
+  try {
+
+    // Check if file was uploaded
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload a PDF resume",
+      });
+    }
+
+    // Get logged-in user
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Save resume path
+    user.resume = `/uploads/resumes/${req.file.filename}`;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Resume uploaded successfully",
+      resume: user.resume,
+
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+        resume: user.resume,
+      },
+    });
+
+  } catch (error) {
+
+    console.error(
+      "UPLOAD RESUME ERROR:",
+      error
+    );
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// =====================================================
 // FORGOT PASSWORD - SEND OTP
 // =====================================================
 
@@ -593,6 +652,7 @@ module.exports = {
   logoutUser,
   refreshAccessToken,  
   getProfile,
+  uploadResumeController,
   forgotPassword,
   verifyResetOtp,
   resetPassword,

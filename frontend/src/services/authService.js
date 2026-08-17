@@ -49,3 +49,16 @@ export const getProfile = async () => {
 export const logoutUser = ()=>{
   return api.post("/auth/logout");
 }
+
+// Upload Resume
+export const uploadResume = (file) => {
+
+  const formData = new FormData();
+
+  formData.append("resume", file);
+
+  return api.post(
+    "/auth/resume",
+    formData
+  );
+};

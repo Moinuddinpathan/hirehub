@@ -57,7 +57,7 @@ const handleSearch = () => {
 
     if (!search.trim()) return;
 
-    navigate(`/jobs?search=${encodeURIComponent(search)}`);
+    navigate(`/jobs?keyword=${encodeURIComponent(search.trim())}`);
 
 };
   
