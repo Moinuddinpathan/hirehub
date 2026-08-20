@@ -9,7 +9,7 @@ function Hero() {
   const { user } = useAuth()
   const navigate = useNavigate()
   return (
-    <section className="hero">
+     <section className="hero">
       <div className="hero-content">
 
         <h1>
@@ -22,19 +22,25 @@ function Hero() {
         </p>
 
         <div className="hero-buttons">
-          <button className="search-btn"
-          onClick={() => navigate("/jobs")}>
+
+          {/* Search Jobs */}
+          <button
+            className="hero-search-btn"
+            onClick={() => navigate("/jobs")}
+          >
             Search Jobs
           </button>
 
+          {/* Post a Job - Admin Only */}
           {user?.role === "admin" && (
-  <button className="post-btn"
-  onClick={() => navigate("/admin/jobs/create")}>
-    Post a Job
-  </button>
-)}
-        </div>
-
+            <button
+              className="post-btn"
+              onClick={() => navigate("/admin/jobs/create")}
+            >
+              Post a Job
+            </button>
+          )}
+             </div>
       </div>
 
       <div className="hero-image">

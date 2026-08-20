@@ -1,22 +1,39 @@
+/* =========================
+   HERO SECTION
+========================= */
+
 .hero {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 80px 8%;
-  background: linear-gradient(135deg, #f8fbff, #eef4ff);
+
   min-height: 90vh;
+  padding: 80px 8%;
   gap: 50px;
+
+  background: linear-gradient(135deg, #f8fbff, #eef4ff);
+
+  box-sizing: border-box;
 }
+
+
+/* =========================
+   HERO CONTENT
+========================= */
 
 .hero-content {
   flex: 1;
+  max-width: 650px;
 }
 
 .hero-content h1 {
+  margin: 0;
+
   font-size: 3.5rem;
   font-weight: 700;
-  color: #222;
   line-height: 1.2;
+
+  color: #222;
 }
 
 .hero-content h1 span {
@@ -24,68 +41,133 @@
 }
 
 .hero-content p {
-  margin: 25px 0;
-  font-size: 18px;
-  color: #555;
-  line-height: 1.7;
   max-width: 550px;
+
+  margin: 25px 0;
+
+  font-size: 18px;
+  line-height: 1.7;
+
+  color: #555;
 }
+
+
+/* =========================
+   BUTTON CONTAINER
+========================= */
 
 .hero-buttons {
   display: flex;
-  gap: 20px;
+  align-items: center;
+
+  gap: 14px;
+
   margin-top: 30px;
+
+  padding: 0;
 }
 
-.search-btn,
+
+/* =========================
+   BOTH BUTTONS
+========================= */
+
+.hero-search-btn,
 .post-btn {
-  padding: 14px 30px;
-  border: none;
+  width: 150px;
+  height: 52px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 20px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+  color: #0d6efd;
+
+  border: 2px solid #0d6efd;
   border-radius: 10px;
-  cursor: pointer;
+
   font-size: 16px;
   font-weight: 600;
-  transition: 0.3s;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
 }
 
-.search-btn {
+
+/* =========================
+   SEARCH JOBS HOVER
+========================= */
+
+.hero-search-btn:hover {
   background: #0d6efd;
-  color: white;
+  color: #ffffff;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 15px rgba(13, 110, 253, 0.2);
 }
 
-.search-btn:hover {
-  background: #0b5ed7;
-}
 
-.post-btn {
-  background: white;
-  color: #0d6efd;
-  border: 2px solid #0d6efd;
-}
+/* =========================
+   POST JOB HOVER
+========================= */
 
 .post-btn:hover {
   background: #0d6efd;
-  color: white;
+  color: #ffffff;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 15px rgba(13, 110, 253, 0.2);
 }
+
+
+/* =========================
+   HERO IMAGE
+========================= */
 
 .hero-image {
   flex: 1;
+
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .hero-image img {
   width: 100%;
   max-width: 600px;
+
   border-radius: 20px;
+
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
+
+/* =========================
+   TABLET
+========================= */
+
 @media (max-width: 992px) {
+
   .hero {
     flex-direction: column-reverse;
+
     text-align: center;
-    padding: 50px 20px;
+
+    padding: 60px 20px;
+
+    gap: 40px;
+  }
+
+  .hero-content {
+    max-width: 700px;
   }
 
   .hero-content h1 {
@@ -98,6 +180,40 @@
 
   .hero-buttons {
     justify-content: center;
-    flex-wrap: wrap;
+  }
+
+  .hero-image img {
+    max-width: 550px;
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 576px) {
+
+  .hero {
+    padding: 50px 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 16px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+
+    width: 100%;
+  }
+
+  .hero-search-btn,
+  .post-btn {
+    width: 180px;
   }
 }

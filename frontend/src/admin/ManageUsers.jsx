@@ -3,120 +3,327 @@ import {
   getUsers,
   deleteUser,
 } from "../services/adminService";
-// import AdminNavbar from "../components/AdminNavbar";
 
+import "../styles/ManageUsers.css";
 
+function ManageUsers() {
+  const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
-function ManageUsers(){
-    const [users, setUsers] = useState([]);
-    const [search, setSearch] = useState("");
+  // ==============================
+  // FETCH USERS
+  // ==============================
 
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
 
-    const fetchUsers = async () => {
-        try {
-            const response = await getUsers();
+      const response = await getUsers();
 
-            console.log(response.data);
-            
-
-        setUsers(response.data.users);
-        } catch (error) {
-            console.log(error);
-            
-        }
+      setUsers(response.data.users || []);
+    } catch (error) {
+      console.log("Failed to fetch users:", error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    useEffect(() => {
+  useEffect(() => {
     fetchUsers();
   }, []);
 
-    const handleDelete = async (id) => {
-        const confirmDelete = window.confirm(
-        "Are you sure you want to delete this user?"
+  // ==============================
+  // DELETE USER
+  // ==============================
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
     );
 
     if (!confirmDelete) {
-        return;
+      return;
     }
 
     try {
-        await deleteUser(id);
+      await deleteUser(id);
 
-        alert("User Deleted")
+      setUsers((prevUsers) =>
+        prevUsers.filter((user) => user._id !== id)
+      );
 
-        fetchUsers()
-
+      alert("User deleted successfully");
     } catch (error) {
-        console.log(error);
-        alert("Delete Failed")
-        
+      console.log("Delete failed:", error);
+      alert("Delete failed");
     }
+  };
 
-    };
+  // ==============================
+  // SEARCH
+  // ==============================
 
-    const filteredUsers = users.filter((user) =>
-  user.name.toLowerCase().includes(search.toLowerCase())
-);
+  const filteredUsers = users.filter((user) => {
+    const searchValue = search.toLowerCase().trim();
 
-    return(
-        <>
-        {/* <AdminNavbar /> */}
-         <div className="container mt-4">
+    return (
+      user.name?.toLowerCase().includes(searchValue) ||
+      user.email?.toLowerCase().includes(searchValue) ||
+      user.role?.toLowerCase().includes(searchValue)
+    );
+  });
 
-            <h2 className="mb-3">Manage Users</h2>
+  // ==============================
+  // AVATAR INITIAL
+  // ==============================
 
-<input
-  type="text"
-  className="form-control mb-3"
-  placeholder="Search by user name..."
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-/>
-            <div className="table-responsive">
+  const getInitial = (name) => {
+    if (!name) return "U";
 
-<table className="table table-bordered table-hover align-middle">
-                 <thead>
+    return name.charAt(0).toUpperCase();
+  };
 
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Role</th>
-            <th>Action</th>
-          </tr>
+  return (
+    <div className="manage-users-page">
 
-        </thead>
+      {/* ==============================
+          PAGE HEADER
+      ============================== */}
 
-        <tbody>
-            {
-                filteredUsers.map((user) => (
-                    <tr key={user._id}>
-                        <td>{user.name}</td>
-                        <td>{user.email}</td>
-                        <td>{user.phone}</td>
-                        <td>{user.role}</td>
+      <div className="manage-users-header">
 
-                        <td>
+        <div>
+          <span className="page-label">
+            USER MANAGEMENT
+          </span>
 
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleDelete(user._id)}
-                >
-                  Delete
-                </button>
+          <h1>Manage Users</h1>
 
-              </td>
-                    </tr>
-                ) )
-            }
-        </tbody>
-          </table>
+          <p>
+            Manage registered users, roles and account access.
+          </p>
+        </div>
 
-</div>
+        <div className="user-count-card">
+          <span>Total Users</span>
+          <strong>{users.length}</strong>
+        </div>
 
-</div>
-</>
-    )
+      </div>
+
+
+      {/* ==============================
+          USERS CARD
+      ============================== */}
+
+      <div className="users-card">
+
+        {/* TOP BAR */}
+
+        <div className="users-card-header">
+
+          <div>
+            <h2>All Users</h2>
+
+            <p>
+              {filteredUsers.length} users found
+            </p>
+          </div>
+
+          {/* SEARCH */}
+
+          <div className="users-search">
+
+            <span className="search-icon">
+              🔍
+            </span>
+
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+            />
+
+            {search && (
+              <button
+                className="clear-search"
+                onClick={() => setSearch("")}
+                type="button"
+              >
+                ×
+              </button>
+            )}
+
+          </div>
+
+        </div>
+
+
+        {/* ==============================
+            TABLE
+        ============================== */}
+
+        <div className="users-table-wrapper">
+
+          {loading ? (
+            <div className="users-loading">
+              <div className="loading-spinner"></div>
+              <p>Loading users...</p>
+            </div>
+          ) : filteredUsers.length === 0 ? (
+
+            <div className="users-empty">
+
+              <div className="empty-icon">
+                👥
+              </div>
+
+              <h3>
+                No users found
+              </h3>
+
+              <p>
+                {search
+                  ? "Try changing your search."
+                  : "There are no registered users yet."}
+              </p>
+
+            </div>
+
+          ) : (
+
+            <table className="users-table">
+
+              <thead>
+                <tr>
+                  <th>USER</th>
+                  <th>EMAIL</th>
+                  <th>PHONE</th>
+                  <th>ROLE</th>
+                  <th>STATUS</th>
+                  <th className="action-column">
+                    ACTION
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                {filteredUsers.map((user) => (
+
+                  <tr key={user._id}>
+
+                    {/* USER */}
+
+                    <td>
+
+                      <div className="user-info">
+
+                        <div className="user-avatar">
+                          {getInitial(user.name)}
+                        </div>
+
+                        <div className="user-name">
+                          <strong>
+                            {user.name || "Unnamed User"}
+                          </strong>
+
+                          <span>
+                            ID: {user._id.slice(-6)}
+                          </span>
+                        </div>
+
+                      </div>
+
+                    </td>
+
+
+                    {/* EMAIL */}
+
+                    <td>
+                      <span className="user-email">
+                        {user.email || "—"}
+                      </span>
+                    </td>
+
+
+                    {/* PHONE */}
+
+                    <td>
+                      <span className="user-phone">
+                        {user.phone || "Not provided"}
+                      </span>
+                    </td>
+
+
+                    {/* ROLE */}
+
+                    <td>
+
+                      <span
+                        className={`role-badge ${
+                          user.role === "admin"
+                            ? "role-admin"
+                            : "role-user"
+                        }`}
+                      >
+                        {user.role === "admin"
+                          ? "Administrator"
+                          : "User"}
+                      </span>
+
+                    </td>
+
+
+                    {/* STATUS */}
+
+                    <td>
+
+                      <span className="status-badge">
+                        <span className="status-dot"></span>
+                        Active
+                      </span>
+
+                    </td>
+
+
+                    {/* ACTION */}
+
+                    <td className="action-column">
+
+                      <button
+                        className="delete-user-btn"
+                        onClick={() =>
+                          handleDelete(user._id)
+                        }
+                        type="button"
+                      >
+                        <span>🗑</span>
+                        Delete
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          )}
+
+        </div>
+
+      </div>
+
+    </div>
+  );
 }
 
 export default ManageUsers;

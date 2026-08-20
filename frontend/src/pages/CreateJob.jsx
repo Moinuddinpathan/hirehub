@@ -175,7 +175,7 @@ function CreateJob() {
                 id="company"
                 type="text"
                 name="company"
-                placeholder="e.g. Google"
+                placeholder="Enter company name"
                 value={formData.company}
                 onChange={handleChange}
                 required
@@ -195,7 +195,7 @@ function CreateJob() {
                 id="title"
                 type="text"
                 name="title"
-                placeholder="e.g. Senior React Developer"
+                placeholder="Enter job title"
                 value={formData.title}
                 onChange={handleChange}
                 required
@@ -304,7 +304,7 @@ function CreateJob() {
                 id="location"
                 type="text"
                 name="location"
-                placeholder="e.g. Mumbai, Maharashtra"
+                placeholder="Enter location"
                 value={formData.location}
                 onChange={handleChange}
                 required
@@ -324,7 +324,7 @@ function CreateJob() {
                 id="salary"
                 type="text"
                 name="salary"
-                placeholder="e.g. ₹8 - ₹12 LPA"
+                placeholder="Enter salary range"
                 value={formData.salary}
                 onChange={handleChange}
                 required
@@ -344,7 +344,7 @@ function CreateJob() {
                 id="experience"
                 type="text"
                 name="experience"
-                placeholder="e.g. 2 - 4 Years"
+                placeholder="Enter required experience"
                 value={formData.experience}
                 onChange={handleChange}
                 required
@@ -492,7 +492,7 @@ function CreateJob() {
               id="skills"
               type="text"
               name="skills"
-              placeholder="e.g. React, JavaScript, Node.js, MongoDB"
+              placeholder="Enter required skills"
               value={formData.skills}
               onChange={handleChange}
               required
@@ -516,7 +516,7 @@ function CreateJob() {
               id="description"
               name="description"
               rows="8"
-              placeholder="Describe the role, responsibilities, requirements and what the candidate will work on..."
+              placeholder="Describe the role, responsibilities and requirements"
               value={formData.description}
               onChange={handleChange}
               required
@@ -536,11 +536,7 @@ function CreateJob() {
               id="responsibilities"
               name="responsibilities"
               rows="6"
-              placeholder={`Example:
-Develop and maintain web applications
-Work with frontend and backend developers
-Fix bugs and improve performance
-Participate in code reviews`}
+              placeholder="Enter key responsibilities"
               value={formData.responsibilities}
               onChange={handleChange}
             />
@@ -564,14 +560,12 @@ Participate in code reviews`}
               id="benefits"
               type="text"
               name="benefits"
-              placeholder="e.g. Health Insurance, Work From Home, Paid Leave"
+              placeholder="Enter employee benefits"
               value={formData.benefits}
               onChange={handleChange}
             />
 
-            <small className="field-help">
-              Separate multiple benefits using commas.
-            </small>
+           
 
           </div>
 
