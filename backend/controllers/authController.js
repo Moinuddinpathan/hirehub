@@ -184,12 +184,115 @@ res.status(200).json({
   }
 };
 
-
 const getProfile = async (req, res) => {
-  res.status(200).json({
-    success: true,
-    user: req.user,
-  });
+  try {
+    const user = await User.findById(req.user.id).select(
+      "-password -refreshToken -resetOtp -resetOtpExpire -resetPasswordOtp -resetPasswordOtpExpiry"
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+
+  } catch (error) {
+    console.error("Get profile error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to get profile",
+    });
+  }
+};
+
+// =========================
+// UPDATE USER PROFILE
+// =========================
+
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const {
+      name,
+      phone,
+      headline,
+      location,
+      bio,
+      skills,
+      education,
+      experience,
+      linkedin,
+      github,
+    } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update fields
+    if (name !== undefined) user.name = name;
+    if (phone !== undefined) user.phone = phone;
+    if (headline !== undefined) user.headline = headline;
+    if (location !== undefined) user.location = location;
+    if (bio !== undefined) user.bio = bio;
+    if (education !== undefined) user.education = education;
+    if (experience !== undefined) user.experience = experience;
+    if (linkedin !== undefined) user.linkedin = linkedin;
+    if (github !== undefined) user.github = github;
+
+    if (skills !== undefined) {
+      user.skills = Array.isArray(skills)
+        ? skills
+        : skills
+            .split(",")
+            .map((skill) => skill.trim())
+            .filter(Boolean);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        headline: user.headline,
+        location: user.location,
+        bio: user.bio,
+        skills: user.skills,
+        education: user.education,
+        experience: user.experience,
+        linkedin: user.linkedin,
+        github: user.github,
+        resume: user.resume,
+        role: user.role,
+      },
+    });
+
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to update profile",
+    });
+  }
 };
 
 // =====================================================
@@ -652,6 +755,7 @@ module.exports = {
   logoutUser,
   refreshAccessToken,  
   getProfile,
+  updateProfile,
   uploadResumeController,
   forgotPassword,
   verifyResetOtp,

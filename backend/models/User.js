@@ -22,16 +22,105 @@ const userSchema = new mongoose.Schema(
       }
     },
 
-    GoogleId : {
+    googleId : {
       type: String,
       unique: true,
       sparse : true,
     },
 
-    // phone: {
-    //   type: String,
-    //   required: true,
-    // },
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+
+     // =========================
+    // PROFESSIONAL INFORMATION
+    // =========================
+
+    headline: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    location: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    bio: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    skills: {
+      type: [String],
+      default: [],
+    },
+
+    education: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    experience: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    linkedin: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    github: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+     
+
+    // =========================
+    // ROLE
+    // =========================
+
+
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+
+    // =========================
+    // RESUME
+    // =========================
+
+    resume: {
+      type: String,
+      default: "",
+    },
+
+
+    // =========================
+    // AUTHENTICATION
+    // =========================
+
+    refreshToken: {
+      type: String,
+      default: "",
+    },
+
+       // =========================
+    // PASSWORD RESET
+    // =========================
 
     resetPasswordOtp: {
   type: String,
@@ -42,22 +131,6 @@ resetPasswordOtpExpiry: {
   type: Date,
   default: null,
 },
-
-    role: {
-      type: String,
-      enum: ["user", "admin"],
-      default: "user",
-    },
-
-    resume: {
-      type: String,
-      default: "",
-    },
-
-    refreshToken: {
-      type: String,
-      default: "",
-    },
 
     resetOtp: {
       type: String,

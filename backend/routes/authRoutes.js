@@ -10,6 +10,7 @@ const {
   logoutUser,
   refreshAccessToken,
   getProfile,  
+  updateProfile,
   uploadResumeController,
   forgotPassword,
   verifyResetOtp,
@@ -82,6 +83,8 @@ router.post("/logout", logoutUser);
 router.post("/refresh-token", refreshAccessToken);
 
 router.get("/profile", authMiddleware, getProfile);
+
+router.put("/profile", authMiddleware, updateProfile)
 
 router.post(
   "/resume",

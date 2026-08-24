@@ -46,6 +46,10 @@ export const getProfile = async () => {
     return response.data;
   };
 
+export const updateProfile = (data) => {
+  return api.put("/auth/profile", data);
+};
+
 export const logoutUser = ()=>{
   return api.post("/auth/logout");
 }

@@ -27,6 +27,8 @@
 
   import EditJob from "./pages/EditJob";
   import ForgotPassword from "./pages/ForgetPassword";
+import CompleteProfile from "./pages/CompleteProfile";
+
 
 
 
@@ -72,6 +74,11 @@
           path="/register"
           element={<Register />}
         />
+
+        <Route
+  path="/complete-profile"
+  element={<CompleteProfile />}
+/>
 
         <Route
           path="/jobs"

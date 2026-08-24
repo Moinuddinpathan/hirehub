@@ -1,0 +1,329 @@
+/* =========================
+   COMPLETE PROFILE PAGE
+========================= */
+
+.complete-profile-page {
+  min-height: 100vh;
+  background: #f6f8fc;
+  padding: 60px 8%;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.profile-header {
+  max-width: 900px;
+  margin: 0 auto 40px;
+}
+
+.profile-header span {
+  display: inline-block;
+  margin-bottom: 12px;
+
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+
+  color: #2563eb;
+}
+
+.profile-header h1 {
+  margin: 0 0 12px;
+
+  font-size: 42px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.profile-header p {
+  margin: 0;
+
+  font-size: 17px;
+  line-height: 1.6;
+
+  color: #64748b;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.profile-form {
+  max-width: 900px;
+  margin: auto;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.profile-section {
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+
+  padding: 32px;
+
+  margin-bottom: 24px;
+
+  box-shadow:
+    0 8px 25px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.section-number {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.section-heading h2 {
+  margin: 0 0 5px;
+
+  font-size: 21px;
+  color: #111827;
+}
+
+.section-heading p {
+  margin: 0;
+
+  font-size: 14px;
+  color: #64748b;
+}
+
+
+/* =========================
+   FORM GRID
+========================= */
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 22px;
+}
+
+
+/* =========================
+   FORM GROUP
+========================= */
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-grid .form-group {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #1e293b;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 14px 15px;
+
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-size: 15px;
+  color: #111827;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+.form-group input {
+  height: 50px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 130px;
+
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+
+/* =========================
+   HELP TEXT
+========================= */
+
+.form-group small {
+  display: block;
+
+  margin-top: 7px;
+
+  font-size: 13px;
+
+  color: #94a3b8;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.form-actions {
+  display: flex;
+
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 24px 0 40px;
+}
+
+.skip-btn,
+.save-profile-btn {
+  height: 48px;
+
+  padding: 0 24px;
+
+  border-radius: 9px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+/* SKIP */
+
+.skip-btn {
+  background: #ffffff;
+
+  color: #475569;
+
+  border: 1px solid #dbe3ef;
+}
+
+.skip-btn:hover {
+  background: #f8fafc;
+}
+
+
+/* SAVE */
+
+.save-profile-btn {
+  background: #2563eb;
+
+  color: #ffffff;
+
+  border: 1px solid #2563eb;
+
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.save-profile-btn:hover {
+  background: #1d4ed8;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .complete-profile-page {
+    padding: 40px 20px;
+  }
+
+  .profile-header h1 {
+    font-size: 32px;
+  }
+
+  .profile-section {
+    padding: 24px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .skip-btn,
+  .save-profile-btn {
+    width: 100%;
+  }
+}

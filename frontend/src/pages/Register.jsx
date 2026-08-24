@@ -136,7 +136,7 @@ localStorage.setItem(
 setOtpSent(false);
 setOtpVerified(false);
 
-      navigate("/login");
+      navigate("/complete-profile");
     } catch (error) {
       alert(error.response?.data?.message || "Registration Failed");
     }
