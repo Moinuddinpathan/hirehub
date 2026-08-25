@@ -297,11 +297,10 @@ function Profile() {
         <div className="profile-header-left">
 
           <div className="profile-avatar">
-            {user.name
-              ?.trim()
-              ?.charAt(0)
-              ?.toUpperCase() || "U"}
-          </div>
+  {user?.name
+    ? user.name.trim().charAt(0).toUpperCase()
+    : "U"}
+</div>
 
           <div className="profile-header-info">
 

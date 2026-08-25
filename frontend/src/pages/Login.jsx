@@ -22,6 +22,9 @@ function Login() {
     password: "",
   });
 
+  const [rememberMe, setRememberMe] = useState(false);
+
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -58,9 +61,10 @@ function Login() {
 
       // YOUR EXISTING AUTH CONTEXT LOGIC
       login(
-        response.data.user,
-        response.data.accessToken
-      );
+  response.data.user,
+  response.data.accessToken,
+  rememberMe
+);
 
       alert("Login Successful");
 
@@ -473,20 +477,22 @@ function Login() {
 
             <div className="login-options">
 
-              <label className="remember-me">
+  <label className="remember-me">
 
-                <input
-                  type="checkbox"
-                  name="remember"
-                />
+    <input
+      type="checkbox"
+      name="remember"
+      checked={rememberMe}
+      onChange={(e) => setRememberMe(e.target.checked)}
+    />
 
-                <span>
-                  Remember me
-                </span>
+    <span>
+      Remember me
+    </span>
 
-              </label>
+  </label>
 
-            </div>
+</div>
 
 
             {/* LOGIN BUTTON */}

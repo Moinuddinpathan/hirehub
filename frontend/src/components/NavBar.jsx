@@ -178,16 +178,14 @@ const closeDropdown = () => {
     >
 
         <div className="avatar">
+    {(user?.name || user?.fullName || user?.username || "U")
+        .charAt(0)
+        .toUpperCase()}
+</div>
 
-            {user?.name?.charAt(0).toUpperCase() || "U"}
-
-        </div>
-
-        <span>
-
-            {user?.name || "Profile"}
-
-        </span>
+<span>
+    {user?.name || user?.fullName || user?.username || "Profile"}
+</span>
 
         ▼
 

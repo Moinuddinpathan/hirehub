@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import "../styles/JobDetails.css";
 import { getJobById, getSimilarJobs } from "../services/jobService";
 import { saveJob, removeSavedJob, getSavedJobs, } from "../services/savedJobService";
+import { useAuth } from "../context/AuthContext";
 
 import {
     ArrowLeft,
@@ -17,7 +18,9 @@ import {
     Clock3,
     Heart,
     Share2,
-    Bookmark
+    Bookmark,
+    X,
+    LockKeyhole
 } from "lucide-react";
 
 function JobDetails() {
@@ -26,6 +29,10 @@ function JobDetails() {
 const navigate = useNavigate();
 
 const location = useLocation();
+
+const { isLoggedIn } = useAuth();
+
+const [showAuthModal, setShowAuthModal] = useState(false);
 
     const { id } = useParams()
 
@@ -39,12 +46,16 @@ const location = useLocation();
     const [saved, setSaved] = useState(false);
 
     useEffect(() => {
-        fetchJob();
+    fetchJob();
 
-        fetchSimilarJobs();
+    fetchSimilarJobs();
 
+    if (isLoggedIn) {
         checkSavedJob();
-    }, [id])
+    } else {
+        setSaved(false);
+    }
+}, [id, isLoggedIn]);
 
     const fetchJob = async () => {
         try {
@@ -98,38 +109,44 @@ const location = useLocation();
 
     const handleSaveJob = async () => {
 
-        try {
+    // User is not logged in
+    if (!isLoggedIn) {
+        setShowAuthModal(true);
+        return;
+    }
 
-            if (!saved) {
+    try {
 
-                await saveJob(job._id);
+        if (!saved) {
 
-                setSaved(true);
+            await saveJob(job._id);
 
-                alert("Job saved successfully.");
+            setSaved(true);
 
-            } else {
+            alert("Job saved successfully.");
 
-                await removeSavedJob(job._id);
+        } else {
 
-                setSaved(false);
+            await removeSavedJob(job._id);
 
-                alert("Job removed from saved jobs.");
+            setSaved(false);
 
-            }
-
-        } catch (error) {
-
-            console.log(error);
-
-            alert(
-                error.response?.data?.message ||
-                "Something went wrong."
-            );
+            alert("Job removed from saved jobs.");
 
         }
 
-    };
+    } catch (error) {
+
+        console.log(error);
+
+        alert(
+            error.response?.data?.message ||
+            "Something went wrong."
+        );
+
+    }
+
+};
 
 
 
@@ -143,39 +160,45 @@ const location = useLocation();
 
     const handleShare = async () => {
 
-        const shareData = {
+    // User is not logged in
+    if (!isLoggedIn) {
+        setShowAuthModal(true);
+        return;
+    }
 
-            title: job.title,
+    const shareData = {
 
-            text: `Check out this job at ${job.company}`,
+        title: job.title,
 
-            url: window.location.href,
+        text: `Check out this job at ${job.company}`,
 
-        };
+        url: window.location.href,
 
-        try {
+    };
 
-            if (navigator.share) {
+    try {
 
-                await navigator.share(shareData);
+        if (navigator.share) {
 
-            } else {
+            await navigator.share(shareData);
 
-                await navigator.clipboard.writeText(
-                    window.location.href
-                );
+        } else {
 
-                alert("Job link copied to clipboard.");
+            await navigator.clipboard.writeText(
+                window.location.href
+            );
 
-            }
-
-        } catch (error) {
-
-            console.log(error);
+            alert("Job link copied to clipboard.");
 
         }
 
-    };
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+};
 
     return (
 
@@ -591,13 +614,20 @@ const location = useLocation();
 </div>
 
                                 <button
-                                    className="apply-button"
-                                    onClick={() =>
-                                        navigate(`/apply/${job._id}`)
-                                    }
-                                >
-                                    Apply Now
-                                </button>
+    className="apply-button"
+    onClick={() => {
+
+        if (!isLoggedIn) {
+            setShowAuthModal(true);
+            return;
+        }
+
+        navigate(`/apply/${job._id}`);
+
+    }}
+>
+    Apply Now
+</button>
 
                                 <button
     className="save-button"
@@ -725,6 +755,97 @@ const location = useLocation();
                     </div>
 
                 </div>
+
+                 {/* ==============================
+                    LOGIN / REGISTER MODAL
+                ============================== */}
+
+                {showAuthModal && (
+
+                    <div
+                        className="auth-modal-overlay"
+                        onClick={() => setShowAuthModal(false)}
+                    >
+
+                        <div
+                            className="auth-modal"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+
+                            {/* Close button */}
+                            <button
+                                className="auth-modal-close"
+                                onClick={() => setShowAuthModal(false)}
+                            >
+                                <X size={20} />
+                            </button>
+
+
+                            {/* Icon */}
+                            <div className="auth-modal-icon">
+                                <LockKeyhole size={28} />
+                            </div>
+
+
+                            {/* Title */}
+                            <h2>
+                                Login Required
+                            </h2>
+
+
+                            {/* Description */}
+                            <p>
+                                Please login or create an account
+                                to continue with this job.
+                            </p>
+
+
+                            {/* Buttons */}
+                            <div className="auth-modal-actions">
+
+                                <button
+                                    className="auth-login-btn"
+                                    onClick={() => {
+                                        setShowAuthModal(false);
+                                        navigate("/login");
+                                    }}
+                                >
+                                    Login
+                                </button>
+
+
+                                <button
+                                    className="auth-register-btn"
+                                    onClick={() => {
+                                        setShowAuthModal(false);
+                                        navigate("/register");
+                                    }}
+                                >
+                                    Create Account
+                                </button>
+
+                            </div>
+
+
+                            {/* Bottom text */}
+                            <div className="auth-modal-footer">
+                                Don't have an account?
+                                <button
+                                    onClick={() => {
+                                        setShowAuthModal(false);
+                                        navigate("/register");
+                                    }}
+                                >
+                                    Register now
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                )}
+                
             </div>
         </>
     )
