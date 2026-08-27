@@ -20,6 +20,13 @@ export const AuthProvider = ({ children }) => {
     storedUser ? JSON.parse(storedUser) : null
   );
 
+  console.log("========== AUTH DEBUG ==========");
+console.log("AUTH USER:", user);
+console.log("USER ROLE:", user?.role);
+console.log("IS LOGGED IN:", isLoggedIn);
+console.log("TOKEN:", localStorage.getItem("token") || sessionStorage.getItem("token"));
+console.log("================================");
+
 
   // ==============================
   // LOGIN
