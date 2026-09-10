@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 
-
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -12,14 +11,13 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const sendOtpEmail = async (email, otp) => {
+  const mailOptions = {
+    from: `"Job Portal" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "Your Job Portal Verification OTP",
 
-const sendOtpEmail = async (email, otp)=>{
-    const mailOptions = {
-        from: `"Job Portal" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: "your Job Portal Verification OTP",
-
-             html: `
+    html: `
       <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto; border:1px solid #ddd; border-radius:10px; overflow:hidden;">
         
         <div style="background:#2563eb; color:white; padding:20px; text-align:center;">
@@ -66,11 +64,10 @@ const sendOtpEmail = async (email, otp)=>{
 
       </div>
     `,
-    }
+  };
 
-   
-    await transporter.sendMail(mailOptions);
-}
+  await transporter.sendMail(mailOptions);
+};
 
 module.exports = {
   sendOtpEmail,
