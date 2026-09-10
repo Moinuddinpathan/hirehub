@@ -650,7 +650,11 @@ res.status(200).json({
 
 const sendOtp = async (req, res) => {
   try {
-    const { email } = req.body;
+
+    console.log("SEND OTP BODY:", req.body);
+
+
+    const { email } = req.body || {};
 
     if(!email){
       return res.status(400).json({
