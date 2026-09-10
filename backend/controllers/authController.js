@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-const OTP = require("../models/OTP")
+const OTP = require("../models/Otp")
 const sendResetPasswordEmail = require("../utils/sendResetPasswordEmail");
 const {
   generateAccessToken,
