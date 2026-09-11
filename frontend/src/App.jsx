@@ -22,7 +22,7 @@
   import CreateJob from "./pages/CreateJob";
   // import AdminNavbar from "../components/AdminNavbar";
   // Admin Protection + Layout
-  import AdminRoute from "./components/AdminRoute";
+import AdminRoute from "./components/adminRoute";
   import AdminLayout from "./components/AdminLayout";
 
   import EditJob from "./pages/EditJob";
