@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const OTP = require("../models/Otp")
@@ -50,6 +51,13 @@ if (!otpData) {
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    console.log("================================");
+console.log("CREATING USER");
+console.log("NAME:", name);
+console.log("EMAIL:", email);
+console.log("DATABASE:", mongoose.connection.name);
+console.log("================================");
 
     // Create user
     const user = await User.create({
@@ -665,6 +673,11 @@ const sendOtp = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
 
+    console.log("================================");
+console.log("EMAIL CHECK:", email);
+console.log("EXISTING USER:", existingUser);
+console.log("DATABASE:", mongoose.connection.name);
+console.log("================================");
     if(existingUser){
       return res.status(400).json({
         success:false,
@@ -690,6 +703,8 @@ const sendOtp = async (req, res) => {
     });
 
   } catch (error) {
+
+     console.error("SEND OTP ERROR:", error)
 
     res.status(500).json({
       success: false,
