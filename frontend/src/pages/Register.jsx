@@ -144,7 +144,7 @@ setOtpVerified(false);
 
 
   const handleGoogleLogin = () => {
-  window.location.href = "http://localhost:5000/api/auth/google";
+  `${import.meta.env.VITE_API_URL}/api/auth/google`;
 };
 
 
