@@ -1,27 +1,11 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("EMAIL SMTP ERROR:", error);
-  } else {
-    console.log("EMAIL SERVER IS READY");
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendOtpEmail = async (email, otp) => {
-  const mailOptions = {
-    from: `"Job Portal" <${process.env.EMAIL_USER}>`,
-    to: email,
+  const { data, error } = await resend.emails.send({
+    from: process.env.EMAIL_FROM,
+    to: [email],
     subject: "Your Job Portal Verification OTP",
 
     html: `
@@ -71,12 +55,18 @@ const sendOtpEmail = async (email, otp) => {
 
       </div>
     `,
-  };
+  });
 
-  await transporter.sendMail(mailOptions);
+  if (error) {
+    console.error("RESEND EMAIL ERROR:", error);
+    throw new Error(error.message || "Failed to send email");
+  }
+
+  console.log("EMAIL SENT SUCCESSFULLY:", data);
+
+  return data;
 };
 
 module.exports = {
   sendOtpEmail,
-  transporter,
 };
