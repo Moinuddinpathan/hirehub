@@ -9,7 +9,7 @@ const {
     verifyAccessToken,
   verifyRefreshToken,
 } = require("../utils/generateToken");
-const { sendOtpEmail, transporter } = require("../utils/sendEmail");
+const { sendOtpEmail } = require("../utils/sendEmail");
 
 
 
