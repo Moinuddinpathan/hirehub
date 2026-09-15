@@ -5,64 +5,73 @@ const api = axios.create({
     withCredentials: true,
 });
 
-
-api.interceptors.request.use((config)=>{
+api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
 
-    if(token){
-        config.headers.Authorization = `Bearer ${token}`
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
 });
 
-api.interceptors.response.use((response) => response, async (error) => {
+api.interceptors.response.use(
+    (response) => response,
 
-  console.log("401 intercepted");
+    async (error) => {
+        const originalRequest = error.config;
 
-    const originalRequest =  error.config;
+        // Only handle 401 errors
+        if (
+            error.response?.status === 401 &&
+            originalRequest &&
+            !originalRequest._retry
+        ) {
 
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry
-    ) {
+            // NEVER try to refresh the refresh-token request itself
+            if (originalRequest.url?.includes("/auth/refresh-token")) {
+                console.log("Refresh token expired or invalid");
 
-      originalRequest._retry = true;
+                localStorage.removeItem("token");
+                window.location.href = "/login";
 
-      try {
-console.log("Calling Refresh API...");
+                return Promise.reject(error);
+            }
 
-       
+            originalRequest._retry = true;
 
-console.log("Calling refresh API...");
-const res = await api.post("/auth/refresh-token");
-console.log("Refresh Success");
-console.log(res.data);
-        const newAccessToken = res.data.accessToken;
+            try {
+                console.log("Calling Refresh API...");
 
-        localStorage.setItem("token", newAccessToken);
+                const res = await api.post("/auth/refresh-token");
 
-        originalRequest.headers.Authorization =
-          `Bearer ${newAccessToken}`;
+                console.log("Refresh Success");
 
-          console.log("Retrying Original Request");
+                const newAccessToken = res.data.accessToken;
 
+                localStorage.setItem("token", newAccessToken);
 
-        return api(originalRequest);
+                originalRequest.headers.Authorization =
+                    `Bearer ${newAccessToken}`;
 
-      } catch (err) {
+                console.log("Retrying Original Request");
 
-        console.log("Refresh Failed", err);
+                return api(originalRequest);
 
-        localStorage.removeItem("token");
+            } catch (err) {
 
-        window.location.href = "/login";
+                console.log("Refresh Failed", err);
 
-      }
+                localStorage.removeItem("token");
 
-      }
+                window.location.href = "/login";
 
-      return Promise.reject(error);
-})
+                return Promise.reject(err);
+            }
+        }
 
-export default api
+        return Promise.reject(error);
+    }
+);
+
+export default api;
