@@ -1,4 +1,6 @@
-const { transporter } = require("./sendEmail");
+const { Resend } = require("resend");
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmailStatus = async (
     email,
@@ -357,12 +359,21 @@ break;
       return;
   }
 
-  await transporter.sendMail({
-    from : `"Job Portal" <${process.env.EMAIL_USER}>`,
-    to : email,
+    const { data, error } = await resend.emails.send({
+    from: process.env.EMAIL_FROM,
+    to: [email],
     subject,
-    html : message ,
+    html: message,
   });
+
+  if (error) {
+    console.error("RESEND STATUS EMAIL ERROR:", error);
+    throw new Error(error.message || "Failed to send status email");
+  }
+
+  console.log("STATUS EMAIL SENT:", data);
+
+  return data;
 };
 
 module.exports = sendEmailStatus;
