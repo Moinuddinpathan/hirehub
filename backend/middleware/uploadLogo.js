@@ -1,20 +1,7 @@
-const multer =  require("multer");
+const multer = require("multer");
 const path = require("path");
 
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/company-logos");
-    },
-
-    filename: (req, file, cb) => {
-        const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1e9);
-
-        cb(null,
-            uniqueName + path.extname(file.originalname)
-        );
-    },
-});
+const storage = multer.memoryStorage();
 
 // Allow only image files
 const fileFilter = (req, file, cb) => {
@@ -29,10 +16,13 @@ const fileFilter = (req, file, cb) => {
   if (isValidExt && isValidMime) {
     cb(null, true);
   } else {
-    cb(new Error("Only JPG, JPEG, PNG and WEBP images are allowed."));
+    cb(
+      new Error(
+        "Only JPG, JPEG, PNG and WEBP images are allowed."
+      )
+    );
   }
 };
-
 
 const uploadLogo = multer({
   storage,

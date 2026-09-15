@@ -1,4 +1,27 @@
 const Job = require("../models/Job");
+const cloudinary = require("../config/cloudinary");
+const streamifier = require("streamifier");
+
+
+const uploadToCloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "hirehub/company-logos",
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+};
 
 const addJob = async (req, res) => {
   try {
@@ -17,6 +40,14 @@ const addJob = async (req, res) => {
       description,
       lastDate,
     } = req.body;
+
+
+    let logoUrl = "";
+
+if (req.file) {
+  const result = await uploadToCloudinary(req.file.buffer);
+  logoUrl = result.secure_url;
+}
 
 
 
@@ -50,7 +81,7 @@ workMode,
       lastDate,
 
       // Save uploaded logo path
-      logo: req.file ? req.file.path : "",
+     logo: logoUrl,
     });
 
     res.status(201).json({
@@ -404,8 +435,9 @@ if (benefits !== undefined) {
 
     // Replace logo only when a new one was uploaded
     if (req.file) {
-      job.logo = req.file.path;
-    }
+  const result = await uploadToCloudinary(req.file.buffer);
+  job.logo = result.secure_url;
+}
 
     await job.save();
 
